@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Ardalis.GuardClauses" Version="4.2.0" />
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Collection" Version="9.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="FluentValidation" Version="11.8.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.8.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+    <PackageReference Include="MediatR" Version="12.1.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.9" />
+    <PackageReference Include="MongoDB.Driver" Version="3.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\TestMillion.Domain.csproj" />
+    <ProjectReference Include="..\Infrastructure\TestMillion.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Common\Interfaces\" />
+    <Folder Include="Features\Owners\Commands\DeleteOwner\" />
+    <Folder Include="Features\Owners\Commands\UpdateOwner\" />
+    <Folder Include="Features\Owners\DTOs\Request\Validators\" />
+    <Folder Include="Features\Owners\Queries\GetOwnerById\" />
+  </ItemGroup>
+
+</Project>

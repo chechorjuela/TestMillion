@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Format code
+echo "🔍 Formatting code..."
+dotnet format --verify-no-changes
+
+# Run tests
+echo "🧪 Running tests..."
+dotnet test
+
+# Build solution
+echo "🔨 Building solution..."
+dotnet build --no-restore

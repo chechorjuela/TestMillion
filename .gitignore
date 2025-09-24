@@ -1,0 +1,93 @@
+# .NET Core
+*.swp
+*.*~
+project.lock.json
+.DS_Store
+*.pyc
+nupkg/
+
+# Visual Studio Code
+.vscode
+.vs
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+msbuild.log
+msbuild.err
+msbuild.wrn
+
+# Visual Studio
+*.VisualState.xml
+TestResult.xml
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# NuGet
+*.nupkg
+# The packages folder can be ignored because of Package Restore
+**/packages/*
+# except build/, which is used as an MSBuild target.
+!**/packages/build/
+# Uncomment if necessary however generally it will be regenerated when needed
+#!**/packages/repositories.config
+
+# Node modules (for Husky)
+node_modules/
+
+# Environment files
+*.env
+.env.*
+appsettings.*.json
+!appsettings.json
+!appsettings.Example.json
+
+# User-specific files
+*.rsuser
+*.dtbcache
+*.dtbcache.json
+*.jfm
+
+# Rider
+.idea/
+*.sln.iml
+
+# Coverage results
+coverage/
+*.coverage
+*.coveragexml
+
+# SQL Server files
+*.mdf
+*.ldf
+*.ndf
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# VS Code directories
+.history/
+
+# Test Results
+TestResults/
+
+# Temporary files
+*.tmp
+*.temp

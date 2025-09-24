@@ -1,0 +1,34 @@
+using AutoMapper;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using TestMillion.Application.Common.Response.Result;
+using TestMillion.Application.Features.Owners.Commands.CreateOwner;
+using TestMillion.Application.Features.Owners.DTOs.Request;
+using TestMillion.Application.Features.Owners.DTOs.Response;
+using TestMillion.Application.Features.Owners.Queries.GetAllOwner;
+using TestMillion.Presentation.Controllers.Base;
+
+namespace TestMillion.Presentation.Controllers;
+
+public class OwnerController : BaseController
+{
+  [HttpGet]
+  [Produces(typeof(ResultResponse<List<OwnerResponseDto>>))]
+  [ActionName(nameof(GetAllOwner))]
+  public async Task<IActionResult> GetAllOwner()
+  {
+    var query = new GetAllOwnerQuery();
+    var response = await this.Mediator.Send(query);
+    return this.FromResult(response);
+  }
+  
+  [HttpPost]
+  [Produces(typeof(ResultResponse<OwnerResponseDto>))]
+  [ActionName(nameof(CreateOwner))]
+  public async Task<IActionResult> CreateOwner(CreateOwnerRequestDto request)
+  {
+    var command = this.Mapper.Map<CreateOwnerCommand>(request);
+    var response = await this.Mediator.Send(command);
+    return this.FromResult(response);
+  }
+}
