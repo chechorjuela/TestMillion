@@ -1,10 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using TestMillion.Application.Common.Models;
-using TestMillion.Application.DTOs;
 using TestMillion.Application.Features.Owners.Queries.GetAllOwner;
 using TestMillion.Application.Properties.Commands.CreateProperty;
 using TestMillion.Application.Properties.DTOs.Request;
-using TestMillion.Application.Properties.Queries.GetProperties;
 using TestMillion.Application.Properties.Queries.GetPropertyDetail;
 using TestMillion.Presentation.Controllers.Base;
 

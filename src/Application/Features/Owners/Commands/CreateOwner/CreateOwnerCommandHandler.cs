@@ -19,10 +19,29 @@ public class CreateOwnerCommandHandler : UseCaseHandler, IRequestHandler<CreateO
 
   public async Task<ResultResponse<OwnerResponseDto>> Handle(CreateOwnerCommand request, CancellationToken cancellationToken)
   {
-    var entity = _mapper.Map<Owner>(request);
-    var objectResponse = await _ownerRepository.AddAsync(entity);
-    var response = _mapper.Map<OwnerResponseDto>(objectResponse);
-    
-    return Succeded(response);
+    try
+    {
+      var entity = _mapper.Map<Owner>(request);
+      
+      // Check if owner with same name exists
+      var existingOwner = await _ownerRepository.GetByNameAsync(request.Name);
+      if (existingOwner != null)
+      {
+        return Invalid<OwnerResponseDto>("An owner with this name already exists.");
+      }
+      
+      var objectResponse = await _ownerRepository.AddAsync(entity);
+      if (objectResponse == null)
+      {
+        return Invalid<OwnerResponseDto>("Failed to create owner.");
+      }
+      
+      var response = _mapper.Map<OwnerResponseDto>(objectResponse);
+      return Created(response);
+    }
+    catch (Exception ex)
+    {
+      return Invalid<OwnerResponseDto>($"An error occurred while creating the owner: {ex.Message}");
+    }
   }
 }

@@ -1,11 +1,14 @@
 using FluentValidation;
 
-namespace TestMillion.Application.Features.Owners.Commands.CreateOwner;
+namespace TestMillion.Application.Features.Owners.Commands.UpdateOwner;
 
-public class CreateOwnerCommandValidator : AbstractValidator<CreateOwnerCommand>
+public class UpdateOwnerCommandValidator : AbstractValidator<UpdateOwnerCommand>
 {
-    public CreateOwnerCommandValidator()
+    public UpdateOwnerCommandValidator()
     {
+        RuleFor(x => x.Id)
+            .NotEmpty().WithMessage("Id is required");
+
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Name is required")
             .MaximumLength(100).WithMessage("Name must not exceed 100 characters");

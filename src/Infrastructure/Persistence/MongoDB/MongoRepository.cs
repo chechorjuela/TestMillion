@@ -81,14 +81,16 @@ public class MongoRepository<T> : IBaseRepository<T> where T : IEntity
         return entity;
     }
 
-    public async Task UpdateAsync(T entity)
+    public async Task<T?> UpdateAsync(T entity)
     {
-        await _collection.ReplaceOneAsync(e => e.Id == entity.Id, entity);
+        var result = await _collection.ReplaceOneAsync(e => e.Id == entity.Id, entity);
+        return result.ModifiedCount > 0 ? entity : default;
     }
 
-    public async Task DeleteAsync(string id)
+    public async Task<bool> DeleteAsync(string id)
     {
         await _collection.DeleteOneAsync(e => e.Id == id);
+        return true;
     }
 
     public Task<bool> ExistsAsync(string id)

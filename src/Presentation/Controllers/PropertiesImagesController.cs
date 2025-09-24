@@ -1,18 +1,14 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TestMillion.Presentation.Controllers.Base;
 
 namespace TestMillion.Presentation.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PropertiesImagesController : ControllerBase
+public class PropertiesImagesController : BaseController
 {
-  private readonly IMediator _mediator;
 
-  public PropertiesImagesController(IMediator mediator)
-  {
-    _mediator = mediator;
-  }
   // GET
   [HttpGet]
   public IActionResult Index()

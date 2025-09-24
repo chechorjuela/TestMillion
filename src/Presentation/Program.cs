@@ -1,7 +1,23 @@
 using TestMillion.Application;
 using TestMillion.Shared.Core;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure Serilog
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .WriteTo.Console()
+    .WriteTo.File(
+        "logs/testmillion-.txt",
+        rollingInterval: RollingInterval.Day,
+        retainedFileCountLimit: 7)
+    .Enrich.WithThreadId()
+    .Enrich.WithEnvironmentName()
+    .Enrich.FromLogContext()
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 EngineContext.Create();
 

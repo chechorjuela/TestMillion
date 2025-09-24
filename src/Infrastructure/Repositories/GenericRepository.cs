@@ -39,16 +39,18 @@ public class GenericRepository<T> : IBaseRepository<T> where T : IEntity
         return entity;
     }
 
-    public async Task UpdateAsync(T entity)
+    public async Task<T?> UpdateAsync(T entity)
     {
         var filter = Builders<T>.Filter.Eq(doc => doc.Id, entity.Id);
-        await _collection.ReplaceOneAsync(filter, entity);
+        var result = await _collection.ReplaceOneAsync(filter, entity);
+        return result.ModifiedCount > 0 ? entity : default;
     }
 
-    public async Task DeleteAsync(string id)
+    public async Task<bool> DeleteAsync(string id)
     {
         var filter = Builders<T>.Filter.Eq(doc => doc.Id, id);
-        await _collection.DeleteOneAsync(filter);
+        var result = await _collection.DeleteOneAsync(filter);
+        return result.DeletedCount > 0;
     }
 
     public Task<bool> ExistsAsync(string id)

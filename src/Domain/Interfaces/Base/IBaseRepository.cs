@@ -9,8 +9,8 @@ public interface IBaseRepository<T> where T : IEntity
     Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
     Task<T?> GetByIdAsync(string id);
     Task<T> AddAsync(T entity);
-    Task UpdateAsync(T entity);
-    Task DeleteAsync(string id);
+    Task<T?> UpdateAsync(T entity);
+    Task<bool> DeleteAsync(string id);
     Task<bool> ExistsAsync(string id);
     Task<long> CountAsync(Expression<Func<T, bool>>? predicate = null);
 }

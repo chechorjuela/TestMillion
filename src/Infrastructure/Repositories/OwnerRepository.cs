@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using TestMillion.Domain.Entities;
 using TestMillion.Domain.Interfaces;
@@ -9,17 +10,29 @@ namespace TestMillion.Infrastructure.Repositories;
 
 public class OwnerRepository : BaseRepository<Owner>, IOwnerRepository
 {
-    private readonly IMongoCollection<Property> _propertyCollection;
+    private readonly IMongoCollection<Owner> _ownerCollection;
+    private readonly ILogger<OwnerRepository> _logger;
 
-    public OwnerRepository(IOptions<MongoDbSettings> settings) : base(settings)
+    public OwnerRepository(IOptions<MongoDbSettings> settings, ILogger<OwnerRepository> logger) : base(settings)
     {
-        _propertyCollection = Database.GetCollection<Property>("Properties");
+        _ownerCollection = Database.GetCollection<Owner>("Owners");
+        _logger = logger;
     }
 
     protected override string GetCollectionName() => "Owners";
 
-    public async Task<bool> HasPropertiesAsync(string ownerId)
+    public async Task<Owner> GetByNameAsync(string name)
     {
-        return await _propertyCollection.Find(p => p.IdOwner == ownerId).AnyAsync();
+        _logger.LogInformation("Getting owner by name: {Name}", name);
+        var owner = await _ownerCollection.FindAsync(o => o.Name == name).Result.FirstOrDefaultAsync();
+        if (owner == null)
+        {
+            _logger.LogWarning("Owner with name {Name} not found", name);
+        }
+        else
+        {
+            _logger.LogInformation("Found owner with ID {OwnerId} for name {Name}", owner.Id, name);
+        }
+        return owner;
     }
 }

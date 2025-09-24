@@ -3,6 +3,8 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TestMillion.Application.Common.Response.Result;
 using TestMillion.Application.Features.Owners.Commands.CreateOwner;
+using TestMillion.Application.Features.Owners.Commands.DeleteOwner;
+using TestMillion.Application.Features.Owners.Commands.UpdateOwner;
 using TestMillion.Application.Features.Owners.DTOs.Request;
 using TestMillion.Application.Features.Owners.DTOs.Response;
 using TestMillion.Application.Features.Owners.Queries.GetAllOwner;
@@ -28,6 +30,27 @@ public class OwnerController : BaseController
   public async Task<IActionResult> CreateOwner(CreateOwnerRequestDto request)
   {
     var command = this.Mapper.Map<CreateOwnerCommand>(request);
+    var response = await this.Mediator.Send(command);
+    return this.FromResult(response);
+  }
+  
+  [HttpPut("{id}")]
+  [Produces(typeof(ResultResponse<OwnerResponseDto>))]
+  [ActionName(nameof(UpdateOwner))]
+  public async Task<IActionResult> UpdateOwner([FromRoute] string id, [FromBody] UpdateOwnerRequestDto request)
+  {
+    request.Id = id;
+    var command = this.Mapper.Map<UpdateOwnerCommand>(request);
+    var response = await this.Mediator.Send(command);
+    return this.FromResult(response);
+  }
+
+  [HttpDelete("{id}")]
+  [Produces(typeof(ResultResponse<bool>))]
+  [ActionName(nameof(DeleteOwner))]
+  public async Task<IActionResult> DeleteOwner([FromRoute] string id)
+  {
+    var command = new DeleteOwnerCommand { Id = id };
     var response = await this.Mediator.Send(command);
     return this.FromResult(response);
   }

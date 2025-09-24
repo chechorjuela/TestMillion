@@ -5,5 +5,5 @@ namespace TestMillion.Domain.Interfaces;
 
 public interface IOwnerRepository : IBaseRepository<Owner>
 {
-    Task<bool> HasPropertiesAsync(string ownerId);
+    Task<Owner> GetByNameAsync(string name);
 }

@@ -4,16 +4,16 @@ namespace TestMillion.Domain.Entities;
 
 public class Owner : Entity
 {
-    public string Name { get; private set; } = string.Empty;
-    public string Address { get; private set; } = string.Empty;
-    public DateOnly Birthday { get; private set; }
-    public string Photo { get; private set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    public string Address { get; set; } = string.Empty;
+    public DateOnly Birthdate { get; set; }
+    public string Photo { get; set; } = string.Empty;
     
-    public Owner(string name, string address, DateOnly birthday)
+    public Owner(string name, string address, DateOnly birthdate)
     {
         Name = name;
         Address = address;
-        Birthday = birthday;
+        Birthdate = birthdate;
     }
 
     // For MongoDB serialization

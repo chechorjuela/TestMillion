@@ -1,10 +1,11 @@
 using FluentValidation;
+using TestMillion.Application.Features.Owners.DTOs.Request;
 
-namespace TestMillion.Application.Features.Owners.Commands.CreateOwner;
+namespace TestMillion.Application.Features.Owners.DTOs.Request.Validators;
 
-public class CreateOwnerCommandValidator : AbstractValidator<CreateOwnerCommand>
+public class CreateOwnerRequestDtoValidator : AbstractValidator<CreateOwnerRequestDto>
 {
-    public CreateOwnerCommandValidator()
+    public CreateOwnerRequestDtoValidator()
     {
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Name is required")

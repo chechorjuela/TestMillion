@@ -28,7 +28,6 @@
   <ItemGroup>
     <Folder Include="Common\Interfaces\" />
     <Folder Include="Features\Owners\Commands\DeleteOwner\" />
-    <Folder Include="Features\Owners\Commands\UpdateOwner\" />
     <Folder Include="Features\Owners\DTOs\Request\Validators\" />
     <Folder Include="Features\Owners\Queries\GetOwnerById\" />
   </ItemGroup>
