@@ -1,4 +1,4 @@
-namespace TestMillion.Application.Features.PropertyImage.Commands.CreatePropertyImage;
+namespace TestMillion.Application.Features.PropertyImage.Cqrs.Commands.CreatePropertyImage;
 
 public class CreatePropertyImageCommandValidator
 {

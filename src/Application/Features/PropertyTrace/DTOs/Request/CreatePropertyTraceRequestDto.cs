@@ -1,6 +1,6 @@
 namespace TestMillion.Application.Features.PropertyTrace.DTOs.Request;
 
-public class CreatePropertyTraceDto
+public class CreatePropertyTraceRequestDto
 {
   
 }
