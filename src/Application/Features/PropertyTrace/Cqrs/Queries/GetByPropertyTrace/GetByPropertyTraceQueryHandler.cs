@@ -36,7 +36,7 @@ public class GetByPropertyTraceQueryHandler : UseCaseHandler, IRequestHandler<Ge
             var propertyTrace = await _propertyTraceRepository.GetByIdAsync(request.Id);
             if (propertyTrace == null)
             {
-                return Invalid<PropertyTraceResponseDto>("Property trace not found");
+                return NotFound<PropertyTraceResponseDto>("Property trace not found");
             }
 
             var property = await _propertyRepository.GetByIdAsync(propertyTrace.IdProperty);

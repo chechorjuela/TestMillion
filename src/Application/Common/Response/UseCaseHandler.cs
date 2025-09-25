@@ -14,9 +14,9 @@ public class UseCaseHandler
     return new ResultResponse<T>(default!, ResultType.Invalid, error ?? "Invalid.");
   }
 
-  public ResultResponse<T> Succeded<T>(T data)
+  public ResultResponse<T> Succeded<T>(T data, string? message = null)
   {
-    return new ResultResponse<T>(data, ResultType.Ok);
+    return new ResultResponse<T>(data, ResultType.Ok, message);
   }
 
   public ResultResponse<T> Created<T>(T data)

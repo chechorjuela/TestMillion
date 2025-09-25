@@ -25,11 +25,11 @@ public class DeletePropertyTraceCommandHandler : UseCaseHandler, IRequestHandler
             var existing = await _propertyTraceRepository.GetByIdAsync(request.Id);
             if (existing == null)
             {
-                return Invalid<bool>("Property trace not found");
+                return NotFound<bool>("Property trace not found");
             }
 
             await _propertyTraceRepository.DeleteAsync(existing.Id);
-            return Succeded(true);
+            return Succeded(true, "Property trace deleted successfully");
         }
         catch (Exception ex)
         {

@@ -32,7 +32,7 @@ public class UpdatePropertyTraceCommandHandler : UseCaseHandler, IRequestHandler
             var existing = await _propertyTraceRepository.GetByIdAsync(request.Id!);
             if (existing == null)
             {
-                return Invalid<PropertyTraceResponseDto>("Property trace not found");
+                return NotFound<PropertyTraceResponseDto>("Property trace not found");
             }
 
             _mapper.Map(request, existing);
