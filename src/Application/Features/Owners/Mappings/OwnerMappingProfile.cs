@@ -1,6 +1,6 @@
 using AutoMapper;
-using TestMillion.Application.Features.Owners.Commands.CreateOwner;
-using TestMillion.Application.Features.Owners.Commands.UpdateOwner;
+using TestMillion.Application.Features.Owners.Cqrs.Commands.CreateOwner;
+using TestMillion.Application.Features.Owners.Cqrs.Commands.UpdateOwner;
 using TestMillion.Application.Features.Owners.DTOs.Request;
 using TestMillion.Application.Features.Owners.DTOs.Response;
 using TestMillion.Domain.Entities;

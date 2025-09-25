@@ -27,9 +27,12 @@
 
   <ItemGroup>
     <Folder Include="Common\Interfaces\" />
-    <Folder Include="Features\Owners\Commands\DeleteOwner\" />
+    <Folder Include="Features\Owners\Cqrs\" />
     <Folder Include="Features\Owners\DTOs\Request\Validators\" />
-    <Folder Include="Features\Owners\Queries\GetOwnerById\" />
+    <Folder Include="Features\Properties\Cqrs\" />
+    <Folder Include="Features\PropertyImage\Cqrs\" />
+    <Folder Include="Features\PropertyImage\DTOs\Request\Validators\" />
+    <Folder Include="Features\PropertyTrace\DTOs\Request\Validators\" />
   </ItemGroup>
 
 </Project>

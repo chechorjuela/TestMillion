@@ -1,35 +1,57 @@
 using Microsoft.AspNetCore.Mvc;
-using TestMillion.Application.Features.Owners.Queries.GetAllOwner;
-using TestMillion.Application.Properties.Commands.CreateProperty;
+using TestMillion.Application.Common.Response.Result;
+using TestMillion.Application.Features.Owners.Cqrs.Queries.GetOwnerById;
+using TestMillion.Application.Features.Properties.Cqrs.Commands.CreateProperty;
+using TestMillion.Application.Features.Properties.Cqrs.Commands.UpdateProperty;
+using TestMillion.Application.Features.Properties.Cqrs.Queries.GetProperties;
+using TestMillion.Application.Features.Properties.DTOs.Response;
 using TestMillion.Application.Properties.DTOs.Request;
-using TestMillion.Application.Properties.Queries.GetPropertyDetail;
 using TestMillion.Presentation.Controllers.Base;
 
 namespace TestMillion.Presentation.Controllers;
 
 public class PropertiesController : BaseController
 {
-  [HttpGet]
-  public async Task<IActionResult> GetAllOwner()
+  
+  [HttpGet()]
+  [Produces(typeof(ResultResponse<List<PropertyResponseDto>>))]
+  [ActionName(nameof(GetAllProperty))]
+  public async Task<IActionResult> GetAllProperty()
   {
-    var query = new GetAllOwnerQuery();
+    var query = new GetPropertyAllQuery();
     var response = await this.Mediator.Send(query);
-    return Ok();
+    return this.FromResult(response);
+  }
+  
+  [HttpPut("{id}")]
+  [Produces(typeof(ResultResponse<PropertyResponseDto>))]
+  [ActionName(nameof(UpdateProperty))]
+  public async Task<IActionResult> UpdateProperty([FromRoute] string id, [FromBody] UpdatePropertyRequestDto request)
+  {
+    request.Id = id;
+
+    var command = this.Mapper.Map<UpdatePropertyCommand>(request);
+    var response = await this.Mediator.Send(command);
+    return this.FromResult(response);
   }
 
   [HttpGet("{id}")]
-  public async Task<IActionResult> GetPropertyDetail(string id)
+  [Produces(typeof(ResultResponse<PropertyResponseDto>))]
+  [ActionName(nameof(GetPropertyById))]
+  public async Task<IActionResult> GetPropertyById(string id)
   {
-    var query = new GetPropertyDetailQuery { Id = id };
-    var result = await this.Mediator.Send(query);
-    return Ok();
+    var query = new GetByIdOwnerQuery(id);
+    var response = await this.Mediator.Send(query);
+    return this.FromResult(response);
   }
 
   [HttpPost]
-  public async Task<IActionResult> Create([FromBody] CreatePropertyRequestDto request)
+  [Produces(typeof(ResultResponse<PropertyResponseDto>))]
+  [ActionName(nameof(CreateOwner))]
+  public async Task<IActionResult> CreateOwner([FromBody] UpdatePropertyRequestDto request)
   {
-    var command = new CreatePropertyCommand(request);
-    var result = await this.Mediator.Send(command);
-    return Ok();
+    var command = this.Mapper.Map<CreatePropertyCommand>(request);
+    var response = await this.Mediator.Send(command);
+    return this.FromResult(response);
   }
 }

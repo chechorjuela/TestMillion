@@ -1,13 +1,13 @@
-using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TestMillion.Application.Common.Response.Result;
-using TestMillion.Application.Features.Owners.Commands.CreateOwner;
-using TestMillion.Application.Features.Owners.Commands.DeleteOwner;
-using TestMillion.Application.Features.Owners.Commands.UpdateOwner;
+using TestMillion.Application.Features.Owners.Cqrs.Commands.CreateOwner;
+using TestMillion.Application.Features.Owners.Cqrs.Commands.DeleteOwner;
+using TestMillion.Application.Features.Owners.Cqrs.Commands.UpdateOwner;
 using TestMillion.Application.Features.Owners.DTOs.Request;
 using TestMillion.Application.Features.Owners.DTOs.Response;
-using TestMillion.Application.Features.Owners.Queries.GetAllOwner;
+using TestMillion.Application.Features.Owners.Cqrs.Queries.GetAllOwner;
+using TestMillion.Application.Features.Owners.Cqrs.Queries.GetOwnerById;
 using TestMillion.Presentation.Controllers.Base;
 
 namespace TestMillion.Presentation.Controllers;
@@ -22,6 +22,16 @@ public class OwnerController : BaseController
     var query = new GetAllOwnerQuery();
     var response = await this.Mediator.Send(query);
     return this.FromResult(response);
+  }
+  
+  [HttpGet("{id}")]
+  [Produces(typeof(ResultResponse<OwnerResponseDto>))]
+  [ActionName(nameof(GetOwnerById))]
+  public async Task<IActionResult> GetOwnerById([FromRoute] string id)
+  {
+    var query = new GetByIdOwnerQuery(id);
+    var response = await this.Mediator.Send(query);
+    return FromResult(response);
   }
   
   [HttpPost]
