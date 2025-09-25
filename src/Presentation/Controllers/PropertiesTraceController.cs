@@ -1,11 +1,15 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TestMillion.Application.Common.Models;
+using TestMillion.Application.Common.Response;
 using TestMillion.Application.Common.Response.Result;
 using TestMillion.Application.Features.PropertyTrace.Commands.CreatePropertyTrace;
+using TestMillion.Application.Features.PropertyTrace.Commands.DeletePropertyTrace;
+using TestMillion.Application.Features.PropertyTrace.Commands.UpdatePropertyTrace;
 using TestMillion.Application.Features.PropertyTrace.Cqrs.Queries.GetAllPropertyTrace;
 using TestMillion.Application.Features.PropertyTrace.Cqrs.Queries.GetByPropertyTrace;
 using TestMillion.Application.Features.PropertyTrace.DTOs.Request;
-using TestMillion.Application.Features.PropertyTrace.DTOs.Resposnse;
+using TestMillion.Application.Features.PropertyTrace.DTOs.Response;
 using TestMillion.Presentation.Controllers.Base;
 
 namespace TestMillion.Presentation.Controllers;
@@ -16,13 +20,13 @@ public class PropertiesTraceController : BaseController
 {
 
   [HttpGet]
-  [Produces(typeof(ResultResponse<List<PropertyTraceResponseDto>>))]
+  [Produces(typeof(PagedResponse<List<PropertyTraceResponseDto>>))]
   [ActionName(nameof(GetAllPropertyTrace))]
-  public async Task<IActionResult> GetAllPropertyTrace()
+  public async Task<IActionResult> GetAllPropertyTrace([FromQuery] PaginationRequestDto pagination, [FromQuery] FilterRequestDto filter = null)
   {
-    var query = new GetAllPropertyTraceQuery();
+    var query = new GetAllPropertyTraceQuery { Pagination = pagination, Filter = filter ?? new FilterRequestDto() };
     var response = await this.Mediator.Send(query);
-    return this.FromResult(response);
+    return this.FromPagedResult(response);
   }
   
   [HttpGet("{id}")]
@@ -50,8 +54,8 @@ public class PropertiesTraceController : BaseController
   [ActionName(nameof(UpdatePropertyTrace))]
   public async Task<IActionResult> UpdatePropertyTrace([FromRoute] string id, [FromBody] UpdatePropertyTraceRequestDto request)
   {
-    request.Id = id;
     var command = this.Mapper.Map<UpdatePropertyTraceCommand>(request);
+    command.Id = id;
     var response = await this.Mediator.Send(command);
     return this.FromResult(response);
   }

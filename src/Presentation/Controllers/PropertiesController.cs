@@ -1,9 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
+using TestMillion.Application.Common.Models;
+using TestMillion.Application.Common.Response;
 using TestMillion.Application.Common.Response.Result;
-using TestMillion.Application.Features.Owners.Cqrs.Queries.GetOwnerById;
+using TestMillion.Application.Features.Properties.DTOs.Request;
 using TestMillion.Application.Features.Properties.Cqrs.Commands.CreateProperty;
+using TestMillion.Application.Features.Properties.Cqrs.Commands.DeleteProperty;
 using TestMillion.Application.Features.Properties.Cqrs.Commands.UpdateProperty;
 using TestMillion.Application.Features.Properties.Cqrs.Queries.GetProperties;
+using TestMillion.Application.Features.Properties.Cqrs.Queries.GetByIdProperty;
 using TestMillion.Application.Features.Properties.DTOs.Response;
 using TestMillion.Application.Properties.DTOs.Request;
 using TestMillion.Presentation.Controllers.Base;
@@ -13,14 +17,14 @@ namespace TestMillion.Presentation.Controllers;
 public class PropertiesController : BaseController
 {
   
-  [HttpGet()]
-  [Produces(typeof(ResultResponse<List<PropertyResponseDto>>))]
+  [HttpGet]
+  [Produces(typeof(PagedResponse<List<PropertyResponseDto>>))]
   [ActionName(nameof(GetAllProperty))]
-  public async Task<IActionResult> GetAllProperty()
+  public async Task<IActionResult> GetAllProperty([FromQuery] PaginationRequestDto pagination, [FromQuery] PropertyFilterDto filter = null)
   {
-    var query = new GetPropertyAllQuery();
+    var query = new GetPropertyAllQuery { Pagination = pagination, Filter = filter ?? new PropertyFilterDto() };
     var response = await this.Mediator.Send(query);
-    return this.FromResult(response);
+    return this.FromPagedResult(response);
   }
   
   [HttpPut("{id}")]
@@ -40,17 +44,27 @@ public class PropertiesController : BaseController
   [ActionName(nameof(GetPropertyById))]
   public async Task<IActionResult> GetPropertyById(string id)
   {
-    var query = new GetByIdOwnerQuery(id);
+    var query = new GetByIdPropertyQuery(id);
     var response = await this.Mediator.Send(query);
     return this.FromResult(response);
   }
 
   [HttpPost]
   [Produces(typeof(ResultResponse<PropertyResponseDto>))]
-  [ActionName(nameof(CreateOwner))]
-  public async Task<IActionResult> CreateOwner([FromBody] UpdatePropertyRequestDto request)
+  [ActionName(nameof(CreateProperty))]
+  public async Task<IActionResult> CreateProperty([FromBody] CreatePropertyRequestDto request)
   {
     var command = this.Mapper.Map<CreatePropertyCommand>(request);
+    var response = await this.Mediator.Send(command);
+    return this.FromResult(response);
+  }
+
+  [HttpDelete("{id}")]
+  [Produces(typeof(ResultResponse<bool>))]
+  [ActionName(nameof(DeleteProperty))]
+  public async Task<IActionResult> DeleteProperty(string id)
+  {
+    var command = new DeletePropertyCommand(id);
     var response = await this.Mediator.Send(command);
     return this.FromResult(response);
   }

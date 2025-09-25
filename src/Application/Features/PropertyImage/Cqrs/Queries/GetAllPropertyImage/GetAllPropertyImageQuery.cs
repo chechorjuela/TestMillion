@@ -1,10 +1,9 @@
 using TestMillion.Application.Common.Queries;
-using TestMillion.Application.Common.Response.Result;
+using TestMillion.Application.Common.Response;
 using TestMillion.Application.Features.PropertyImage.DTOs.Response;
 
 namespace TestMillion.Application.Features.PropertyImage.Cqrs.Queries.GetAllPropertyImage;
 
-public class GetAllPropertyImageQuery: IQuery<ResultResponse<List<PropertyImageResponseDto>>>
+public class GetAllPropertyImageQuery : PaginatedQuery, IQuery<PagedResponse<List<PropertyImageResponseDto>>>
 {
-  
 }

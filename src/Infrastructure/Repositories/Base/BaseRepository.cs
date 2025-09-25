@@ -4,6 +4,8 @@ using MongoDB.Driver;
 using TestMillion.Domain.Common.Entities;
 using TestMillion.Domain.Interfaces.Base;
 using TestMillion.Infrastructure.Persistence.MongoDB;
+using TestMillion.Domain.Common.Models;
+using MongoDB.Driver.Linq;
 
 namespace TestMillion.Infrastructure.Repositories.Base;
 
@@ -23,12 +25,59 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : class, IE
 
   public virtual async Task<IEnumerable<T>> GetAllAsync()
   {
-    return await Collection.Find(_ => true).ToListAsync();
+    try
+    {
+      var data = await Collection.Find(_ => true).ToListAsync();
+      Console.WriteLine($"GetAllAsync for {typeof(T).Name}: Found {data.Count} items");
+      return data;
+    }
+    catch (Exception ex)
+    {
+      Console.WriteLine($"Error in GetAllAsync for {typeof(T).Name}: {ex.Message}");
+      throw;
+    }
   }
 
   public virtual async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
   {
     return await Collection.Find(predicate).ToListAsync();
+  }
+
+  public virtual async Task<(IEnumerable<T> Items, int TotalCount)> GetPagedAsync(PaginationModel pagination)
+  {
+    var skip = (pagination.PageNumber - 1) * pagination.PageSize;
+    var total = (int)await Collection.CountDocumentsAsync(_ => true);
+    var items = await Collection
+      .Find(_ => true)
+      .Skip(skip)
+      .Limit(pagination.PageSize)
+      .ToListAsync();
+    return (items, total);
+  }
+
+  public virtual async Task<(IEnumerable<T> Items, int TotalCount)> GetPagedAsync(PaginationModel pagination, FilterModel filter)
+  {
+    var query = Collection.AsQueryable();
+
+    if (!string.IsNullOrWhiteSpace(filter.SearchTerm))
+    {
+      // naive string contains search across ToString
+      query = query.Where(x => x.ToString()!.ToLower().Contains(filter.SearchTerm!.ToLower()));
+    }
+
+    if (!string.IsNullOrWhiteSpace(filter.SortBy))
+    {
+      // fallback: no dynamic sort binding, can be improved per-entity
+      query = filter.SortDesc ? query.OrderByDescending(x => x.Id) : query.OrderBy(x => x.Id);
+    }
+
+    var total = await query.CountAsync();
+    var items = await query
+      .Skip((pagination.PageNumber - 1) * pagination.PageSize)
+      .Take(pagination.PageSize)
+      .ToListAsync();
+
+    return (items, (int)total);
   }
 
   public virtual async Task<T?> GetByIdAsync(string id)

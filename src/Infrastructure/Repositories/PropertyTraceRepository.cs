@@ -11,6 +11,7 @@ public class PropertyTraceRepository : BaseRepository<PropertyTrace>, IPropertyT
 {
     public PropertyTraceRepository(IOptions<MongoDbSettings> settings) : base(settings)
     {
+        MongoConfig.Initialize();
     }
 
     protected override string GetCollectionName() => "PropertiesTrace";

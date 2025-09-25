@@ -1,11 +1,12 @@
 using TestMillion.Application.Common.Response;
-using TestMillion.Application.Common.Response.Result;
+using TestMillion.Application.Common.Models;
 using TestMillion.Application.Features.Owners.DTOs.Response;
 using TestMillion.Domain.Interfaces;
+using TestMillion.Domain.Common.Models;
 
 namespace TestMillion.Application.Features.Owners.Cqrs.Queries.GetAllOwner;
 
-public class GetAllOwnerCommandHandler : UseCaseHandler, IRequestHandler<GetAllOwnerQuery, ResultResponse<List<OwnerResponseDto>>>
+public class GetAllOwnerCommandHandler : UseCaseHandler, IRequestHandler<GetAllOwnerQuery, PagedResponse<List<OwnerResponseDto>>>
 {
   public readonly IOwnerRepository _ownerRepository;
   public readonly IMapper _mapper;
@@ -18,10 +19,13 @@ public class GetAllOwnerCommandHandler : UseCaseHandler, IRequestHandler<GetAllO
     _ownerRepository = ownerRepository;
   }
   
-  public async Task<ResultResponse<List<OwnerResponseDto>>> Handle(GetAllOwnerQuery request, CancellationToken cancellationToken)
+  public async Task<PagedResponse<List<OwnerResponseDto>>> Handle(GetAllOwnerQuery request, CancellationToken cancellationToken)
   {
-    var owners = await _ownerRepository.GetAllAsync();
-    var result = this._mapper.Map<List<OwnerResponseDto>>(owners);
-    return Succeded(result);
+    var paginationModel = _mapper.Map<PaginationModel>(request.Pagination);
+    var filterModel = _mapper.Map<FilterModel>(request.Filter);
+    var (items, total) = await _ownerRepository.GetPagedAsync(paginationModel, filterModel);
+    var result = this._mapper.Map<List<OwnerResponseDto>>(items);
+    var meta = new PaginationMetadataDto(total, request.Pagination.PageSize, request.Pagination.PageNumber);
+    return PagedResponse<List<OwnerResponseDto>>.Success(result, "Owners fetched successfully", meta);
   }
 }

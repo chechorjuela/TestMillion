@@ -3,6 +3,8 @@ using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using TestMillion.Domain.Common.Entities;
 using TestMillion.Domain.Interfaces.Base;
+using TestMillion.Domain.Common.Models;
+using MongoDB.Driver.Linq;
 
 namespace TestMillion.Infrastructure.Persistence.MongoDB;
 
@@ -73,6 +75,40 @@ public class MongoRepository<T> : IBaseRepository<T> where T : IEntity
             .ToListAsync();
 
         return (items, totalCount);
+    }
+
+    // New interface implementations
+    public async Task<(IEnumerable<T> Items, int TotalCount)> GetPagedAsync(PaginationModel pagination)
+    {
+        var skip = (pagination.PageNumber - 1) * pagination.PageSize;
+        var total = (int)await _collection.CountDocumentsAsync(_ => true);
+        var items = await _collection
+            .Find(_ => true)
+            .Skip(skip)
+            .Limit(pagination.PageSize)
+            .ToListAsync();
+        return (items, total);
+    }
+
+    public async Task<(IEnumerable<T> Items, int TotalCount)> GetPagedAsync(PaginationModel pagination, FilterModel filter)
+    {
+        var query = _collection.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(filter.SearchTerm))
+        {
+            query = query.Where(x => x.ToString()!.ToLower().Contains(filter.SearchTerm!.ToLower()));
+        }
+
+        // Note: For generality, fallback sort by Id
+        query = filter.SortDesc ? query.OrderByDescending(x => x.Id) : query.OrderBy(x => x.Id);
+
+        var total = (int)await query.CountAsync();
+        var items = await query
+            .Skip((pagination.PageNumber - 1) * pagination.PageSize)
+            .Take(pagination.PageSize)
+            .ToListAsync();
+
+        return (items, total);
     }
 
     public async Task<T> AddAsync(T entity)

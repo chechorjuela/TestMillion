@@ -4,6 +4,8 @@ using TestMillion.Domain.Common.Entities;
 using TestMillion.Infrastructure.Persistence.MongoDB;
 using Microsoft.Extensions.Options;
 using TestMillion.Domain.Interfaces.Base;
+using TestMillion.Domain.Common.Models;
+using MongoDB.Driver.Linq;
 
 namespace TestMillion.Infrastructure.Repositories;
 
@@ -29,6 +31,9 @@ public class GenericRepository<T> : IBaseRepository<T> where T : IEntity
 
     public async Task<T?> GetByIdAsync(string id)
     {
+        if (!MongoDB.Bson.ObjectId.TryParse(id, out var objectId))
+            return default;
+
         var filter = Builders<T>.Filter.Eq(doc => doc.Id, id);
         return await _collection.Find(filter).SingleOrDefaultAsync();
     }
@@ -87,5 +92,38 @@ public class GenericRepository<T> : IBaseRepository<T> where T : IEntity
             .ToListAsync();
 
         return (items, totalCount);
+    }
+
+    // New interface implementations
+    public async Task<(IEnumerable<T> Items, int TotalCount)> GetPagedAsync(PaginationModel pagination)
+    {
+        var skip = (pagination.PageNumber - 1) * pagination.PageSize;
+        var total = (int)await _collection.CountDocumentsAsync(_ => true);
+        var items = await _collection
+            .Find(_ => true)
+            .Skip(skip)
+            .Limit(pagination.PageSize)
+            .ToListAsync();
+        return (items, total);
+    }
+
+    public async Task<(IEnumerable<T> Items, int TotalCount)> GetPagedAsync(PaginationModel pagination, FilterModel filter)
+    {
+        var query = _collection.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(filter.SearchTerm))
+        {
+            query = query.Where(x => x.ToString()!.ToLower().Contains(filter.SearchTerm!.ToLower()));
+        }
+
+        query = filter.SortDesc ? query.OrderByDescending(x => x.Id) : query.OrderBy(x => x.Id);
+
+        var total = (int)await query.CountAsync();
+        var items = await query
+            .Skip((pagination.PageNumber - 1) * pagination.PageSize)
+            .Take(pagination.PageSize)
+            .ToListAsync();
+
+        return (items, total);
     }
 }

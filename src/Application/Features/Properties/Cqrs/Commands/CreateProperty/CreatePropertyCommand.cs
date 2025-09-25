@@ -5,7 +5,7 @@ using TestMillion.Application.Properties.DTOs.Request;
 
 namespace TestMillion.Application.Features.Properties.Cqrs.Commands.CreateProperty;
 
-public class CreatePropertyCommand : CreatePropertyRequestDto, ICommand<ResultResponse<PropertyResponseDto>>
+public class CreatePropertyCommand : CreatePropertyRequestDto, IRequest<ResultResponse<PropertyResponseDto>>
 {
-  
+
 }

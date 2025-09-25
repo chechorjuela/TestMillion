@@ -1,3 +1,4 @@
+using MediatR;
 using TestMillion.Application.Common.Commands;
 using TestMillion.Application.Common.Response.Result;
 
@@ -5,5 +6,5 @@ namespace TestMillion.Application.Features.PropertyImage.Commands.DeleteProperty
 
 public class DeletePropertyImageCommand : ICommand<ResultResponse<bool>>
 {
-  public string Id { get; set; }
+  public required string Id { get; set; }
 }

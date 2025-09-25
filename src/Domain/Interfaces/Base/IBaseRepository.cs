@@ -1,11 +1,14 @@
 using System.Linq.Expressions;
 using TestMillion.Domain.Common.Entities;
+using TestMillion.Domain.Common.Models;
 
 namespace TestMillion.Domain.Interfaces.Base;
 
 public interface IBaseRepository<T> where T : IEntity
 {
     Task<IEnumerable<T>> GetAllAsync();
+    Task<(IEnumerable<T> Items, int TotalCount)> GetPagedAsync(PaginationModel pagination);
+    Task<(IEnumerable<T> Items, int TotalCount)> GetPagedAsync(PaginationModel pagination, FilterModel filter);
     Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
     Task<T?> GetByIdAsync(string id);
     Task<T> AddAsync(T entity);

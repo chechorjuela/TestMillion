@@ -16,16 +16,18 @@ public static class DependencyInjectionApplication
     
     services.AddInfrastructure(configuration);
     
-    services.AddExceptionHandler<ValidationExceptionHandler>();
-    services.AddExceptionHandler<BadRequestExceptionHandler>();
-    services.AddExceptionHandler<NotFoundExceptionHandler>();
-    services.AddExceptionHandler<InternalServerExceptionHandler>();
-    services.AddExceptionHandler<GlobalExceptionHandler>();
     services.AddProblemDetails();
     
     services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
     services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly(), ServiceLifetime.Transient);
+
+    // Register exception handlers in order of specificity
+    services.AddExceptionHandler<TestMillion.Application.Common.Exceptions.Validation.ValidationExceptionHandler>();
+    services.AddExceptionHandler<BadRequestExceptionHandler>();
+    services.AddExceptionHandler<NotFoundExceptionHandler>();
+    services.AddExceptionHandler<InternalServerExceptionHandler>();
+    services.AddExceptionHandler<GlobalExceptionHandler>();
 
     services.AddMediatR(cfg =>
     {

@@ -1,8 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
+using TestMillion.Application.Common.Models;
+using TestMillion.Application.Common.Response;
 using TestMillion.Application.Common.Response.Result;
-using TestMillion.Application.Features.PropertyImage.Commands.CreatePropertyImage;
+using TestMillion.Application.Features.PropertyImage.Cqrs.Commands.CreatePropertyImage;
 using TestMillion.Application.Features.PropertyImage.Commands.DeletePropertyImage;
+using TestMillion.Application.Features.PropertyImage.Commands.UpdatePropertyImage;
 using TestMillion.Application.Features.PropertyImage.Cqrs.Queries.GetAllPropertyImage;
+using TestMillion.Application.Features.PropertyImage.Cqrs.Queries.GetByIdPropertyImage;
 using TestMillion.Application.Features.PropertyImage.DTOs.Request;
 using TestMillion.Application.Features.PropertyImage.DTOs.Response;
 using TestMillion.Presentation.Controllers.Base;
@@ -14,21 +18,21 @@ namespace TestMillion.Presentation.Controllers;
 public class PropertiesImagesController : BaseController
 {
   [HttpGet]
-  [Produces(typeof(ResultResponse<List<PropertyImageResponseDto>>))]
+  [Produces(typeof(PagedResponse<List<PropertyImageResponseDto>>))]
   [ActionName(nameof(GetAllPropertyImage))]
-  public async Task<IActionResult> GetAllPropertyImage()
+  public async Task<IActionResult> GetAllPropertyImage([FromQuery] PaginationRequestDto pagination, [FromQuery] FilterRequestDto filter = null)
   {
-    var query = new GetAllPropertyImageQuery();
+    var query = new GetAllPropertyImageQuery { Pagination = pagination, Filter = filter ?? new FilterRequestDto() };
     var response = await this.Mediator.Send(query);
-    return this.FromResult(response);
+    return this.FromPagedResult(response);
   }
   
   [HttpGet("{id}")]
   [Produces(typeof(ResultResponse<PropertyImageResponseDto>))]
   [ActionName(nameof(GetPropertyImageById))]
-  public async Task<IActionResult> GetPropertyImageById([FromRoute] string Id)
+  public async Task<IActionResult> GetPropertyImageById([FromRoute] string id)
   {
-    var query = new GetByPropertyImageQuery { Id = Id};
+    var query = new GetByPropertyImageQuery(id);
     var response = await this.Mediator.Send(query);
     return this.FromResult(response);
   }

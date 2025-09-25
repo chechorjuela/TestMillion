@@ -5,7 +5,7 @@ namespace TestMillion.Application.Features.Properties.Cqrs.Commands.DeleteProper
 
 public class DeletePropertyCommand: ICommand<ResultResponse<bool>>
 {
-  public string Id;
+  public string Id { get; set; }
   public DeletePropertyCommand(string id)
   {
     Id = id;

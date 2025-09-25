@@ -5,7 +5,7 @@ using TestMillion.Domain.Interfaces.Base;
 
 namespace TestMillion.Application.Properties.DTOs.Request.Validators;
 
-public class CreatePropertyRequestDtoValidator : AbstractValidator<UpdatePropertyRequestDto>
+public class CreatePropertyRequestDtoValidator : AbstractValidator<CreatePropertyRequestDto>
 {
   private readonly IBaseRepository<Owner> _ownerRepository;
 

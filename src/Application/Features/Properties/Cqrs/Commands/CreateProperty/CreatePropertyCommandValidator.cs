@@ -1,15 +1,19 @@
+using Microsoft.Extensions.Logging;
 using TestMillion.Domain.Entities;
+using TestMillion.Domain.Interfaces;
 using TestMillion.Domain.Interfaces.Base;
 
 namespace TestMillion.Application.Features.Properties.Cqrs.Commands.CreateProperty;
 
 public class CreatePropertyCommandValidator : AbstractValidator<CreatePropertyCommand>
 {
-  private readonly IBaseRepository<Owner> _ownerRepository;
+  private readonly IOwnerRepository _ownerRepository;
+  private readonly ILogger<CreatePropertyCommandValidator> _logger;
 
-  public CreatePropertyCommandValidator(IBaseRepository<Owner> ownerRepository)
+  public CreatePropertyCommandValidator(IOwnerRepository ownerRepository, ILogger<CreatePropertyCommandValidator> logger)
   {
     _ownerRepository = ownerRepository;
+    _logger = logger;
 
     RuleFor(x => x.Name)
       .NotEmpty().WithMessage("Name is required")
@@ -31,11 +35,22 @@ public class CreatePropertyCommandValidator : AbstractValidator<CreatePropertyCo
       .LessThanOrEqualTo(System.DateTime.Now.Year).WithMessage("Year cannot be in the future");
 
     RuleFor(x => x.IdOwner)
+      .Cascade(CascadeMode.Stop)
       .NotEmpty().WithMessage("Owner ID is required")
+      .Must(id => 
+      {
+        var isValid = MongoDB.Bson.ObjectId.TryParse(id, out _);
+        _logger.LogInformation("Validating owner ID format: {OwnerId}, IsValid: {IsValid}", id, isValid);
+        return isValid;
+      })
+      .WithMessage("Owner ID must be a valid 24-character hexadecimal string")
       .MustAsync(async (id, cancellation) =>
       {
+        _logger.LogInformation("Looking up owner with ID: {OwnerId}", id);
         var owner = await _ownerRepository.GetByIdAsync(id);
+        _logger.LogInformation("Owner lookup result for ID {OwnerId}: {Found}", id, owner != null);
         return owner != null;
-      }).WithMessage("Owner not found");
+      })
+      .WithMessage("Owner not found");
   }
 }

@@ -1,5 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TestMillion.Application.Common.Models;
+using TestMillion.Application.Common.Response;
 using TestMillion.Application.Common.Response.Result;
 using TestMillion.Application.Features.Owners.Cqrs.Commands.CreateOwner;
 using TestMillion.Application.Features.Owners.Cqrs.Commands.DeleteOwner;
@@ -15,13 +17,13 @@ namespace TestMillion.Presentation.Controllers;
 public class OwnerController : BaseController
 {
   [HttpGet]
-  [Produces(typeof(ResultResponse<List<OwnerResponseDto>>))]
+  [Produces(typeof(PagedResponse<List<OwnerResponseDto>>))]
   [ActionName(nameof(GetAllOwner))]
-  public async Task<IActionResult> GetAllOwner()
+  public async Task<IActionResult> GetAllOwner([FromQuery] PaginationRequestDto pagination, [FromQuery] FilterRequestDto filter = null)
   {
-    var query = new GetAllOwnerQuery();
+    var query = new GetAllOwnerQuery { Pagination = pagination, Filter = filter ?? new FilterRequestDto() };
     var response = await this.Mediator.Send(query);
-    return this.FromResult(response);
+    return this.FromPagedResult(response);
   }
   
   [HttpGet("{id}")]
@@ -49,8 +51,19 @@ public class OwnerController : BaseController
   [ActionName(nameof(UpdateOwner))]
   public async Task<IActionResult> UpdateOwner([FromRoute] string id, [FromBody] UpdateOwnerRequestDto request)
   {
+    if (string.IsNullOrEmpty(id))
+    {
+        return BadRequest("Id cannot be empty");
+    }
+
     request.Id = id;
     var command = this.Mapper.Map<UpdateOwnerCommand>(request);
+    
+    if (command == null)
+    {
+        return BadRequest("Invalid request data");
+    }
+
     var response = await this.Mediator.Send(command);
     return this.FromResult(response);
   }

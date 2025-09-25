@@ -21,7 +21,12 @@ builder.Host.UseSerilog();
 
 EngineContext.Create();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options => {
+        options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+        options.JsonSerializerOptions.PropertyNamingPolicy = null;
+        options.JsonSerializerOptions.WriteIndented = true;
+    });
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -40,6 +45,9 @@ if (app.Environment.IsDevelopment())
 }
 app.UseSwagger();
 app.UseSwaggerUI();
+
+// Enable centralized exception handling (includes validation errors)
+app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
 app.UseHttpsRedirection();

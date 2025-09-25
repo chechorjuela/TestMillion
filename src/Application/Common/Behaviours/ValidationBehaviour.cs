@@ -29,7 +29,9 @@ public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TReque
         .ToList();
 
       if (failures.Count != 0)
-        throw new ValidationException(failures);
+      {
+        throw new TestMillion.Application.Common.Exceptions.Validation.ValidationException(failures);
+      }
     }
     return await next();
   }

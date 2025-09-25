@@ -22,5 +22,6 @@ public class PropertyTrace : Entity
       IdProperty = idProperty;
   }
   
-  
+  // For MongoDB serialization
+  private PropertyTrace() { }
 }

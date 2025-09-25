@@ -5,7 +5,9 @@ public class UpdateOwnerCommandValidator : AbstractValidator<UpdateOwnerCommand>
     public UpdateOwnerCommandValidator()
     {
         RuleFor(x => x.Id)
-            .NotEmpty().WithMessage("Id is required");
+            .NotEmpty().WithMessage("Id is required")
+            .Must(id => MongoDB.Bson.ObjectId.TryParse(id, out _))
+            .WithMessage("Invalid ID format");
 
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Name is required")

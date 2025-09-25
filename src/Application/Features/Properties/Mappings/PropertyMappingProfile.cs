@@ -11,7 +11,7 @@ public class PropertyMappingProfile : Profile
   public PropertyMappingProfile()
   {
     // Create mappings
-    CreateMap<UpdatePropertyRequestDto, CreatePropertyCommand>();
+    CreateMap<CreatePropertyRequestDto, CreatePropertyCommand>();
     CreateMap<CreatePropertyCommand, Property>();
         
     // Update mappings
@@ -19,6 +19,7 @@ public class PropertyMappingProfile : Profile
     CreateMap<UpdatePropertyCommand, Property>();
         
     // Response mappings
-    CreateMap<Property, PropertyResponseDto>();
+    CreateMap<Property, PropertyResponseDto>()
+      .ForMember(dest => dest.IdOwner, opt => opt.MapFrom(src => src.IdOwner));
   }
 }

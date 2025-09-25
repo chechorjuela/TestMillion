@@ -1,11 +1,16 @@
+using OwnerDto = TestMillion.Application.Features.Owners.DTOs.Response.OwnerResponseDto;
+
 namespace TestMillion.Application.Features.Properties.DTOs.Response;
 
 public class PropertyResponseDto
 {
-  public string Id { get; set; } = string.Empty;
-  public string IdOwner { get; set; } = string.Empty;
-  public string Name { get; set; } = string.Empty;
-  public string Address { get; set; } = string.Empty;
-  public decimal Price { get; set; }
-  public string? MainImage { get; set; }
+    public string Id { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    public string Address { get; set; } = string.Empty;
+    public decimal Price { get; set; }
+    public string CodeInternal { get; set; } = string.Empty;
+    public int Year { get; set; }
+    public string IdOwner { get; set; } = string.Empty;
+    public OwnerDto? Owner { get; set; }
+    public string? MainImage { get; set; }
 }
