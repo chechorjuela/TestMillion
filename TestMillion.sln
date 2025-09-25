@@ -5,13 +5,13 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4AE5DEFB-40B6-4B88-888B-8A2BFB50C436}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMillion.Domain", "src\Domain\TestMillion.Domain.csproj", "{BE902B1B-AB44-4B42-94D8-A5A772CF03EA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMillion.Domain", "src\TestMillion.Domain\TestMillion.Domain.csproj", "{BE902B1B-AB44-4B42-94D8-A5A772CF03EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMillion.Application", "src\Application\TestMillion.Application.csproj", "{E2317D57-2985-4262-A06E-E4C99724217B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMillion.Application", "src\TestMillion.Application\TestMillion.Application.csproj", "{E2317D57-2985-4262-A06E-E4C99724217B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMillion.Infrastructure", "src\Infrastructure\TestMillion.Infrastructure.csproj", "{9B10FA49-6C59-4B95-B274-BAB9F10C167F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMillion.Infrastructure", "src\TestMillion.Infrastructure\TestMillion.Infrastructure.csproj", "{9B10FA49-6C59-4B95-B274-BAB9F10C167F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMillion.Presentation", "src\Presentation\TestMillion.Presentation.csproj", "{389318FC-E22B-4CD6-BC8E-6FC61DC22A7B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMillion.Presentation", "src\TestMillion.Presentation\TestMillion.Presentation.csproj", "{389318FC-E22B-4CD6-BC8E-6FC61DC22A7B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A1C2B3D4-E5F6-47A8-9B0C-1D2E3F4A5B6C}"
 	ProjectSection(SolutionItems) = preProject
@@ -32,10 +32,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = src\Presentation\TestMillion.Presentation.csproj
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
+		StartupItem = src\TestMillion.Presentation\TestMillion.Presentation.csproj
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{BE902B1B-AB44-4B42-94D8-A5A772CF03EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

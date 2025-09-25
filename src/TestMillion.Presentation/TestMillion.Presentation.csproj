@@ -22,8 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Application\TestMillion.Application.csproj" />
-    <ProjectReference Include="..\Infrastructure\TestMillion.Infrastructure.csproj" />
+    <ProjectReference Include="..\TestMillion.Application\TestMillion.Application.csproj" />
+    <ProjectReference Include="..\TestMillion.Infrastructure\TestMillion.Infrastructure.csproj" />
     <ProjectReference Include="..\TestMillion.Shared\TestMillion.Shared.csproj" />
   </ItemGroup>
 

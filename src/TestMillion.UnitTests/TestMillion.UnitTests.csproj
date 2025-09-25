@@ -29,8 +29,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Application\TestMillion.Application.csproj" />
-    <ProjectReference Include="..\..\src\Domain\TestMillion.Domain.csproj" />
+    <ProjectReference Include="..\TestMillion.Application\TestMillion.Application.csproj" />
+    <ProjectReference Include="..\TestMillion.Domain\TestMillion.Domain.csproj" />
   </ItemGroup>
 
 </Project>
