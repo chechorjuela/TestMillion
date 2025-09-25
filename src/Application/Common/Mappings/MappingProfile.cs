@@ -1,5 +1,4 @@
 using AutoMapper;
-using TestMillion.Application.DTOs;
 using TestMillion.Application.Features.Owners.Cqrs.Commands.CreateOwner;
 using TestMillion.Application.Features.Owners.DTOs.Request;
 using TestMillion.Application.Features.Owners.DTOs.Response;

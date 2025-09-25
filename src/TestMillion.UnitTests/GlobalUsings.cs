@@ -11,7 +11,6 @@ global using Moq;
 global using TestMillion.Application.Common.Models;
 global using TestMillion.Application.Common.Response;
 global using TestMillion.Application.Common.Response.Result;
-global using TestMillion.Application.DTOs;
 global using TestMillion.Application.Features.Properties.DTOs.Response;
 global using TestMillion.Application.Features.Properties.DTOs.Request;
 global using TestMillion.Application.Features.PropertyImage.DTOs.Response;

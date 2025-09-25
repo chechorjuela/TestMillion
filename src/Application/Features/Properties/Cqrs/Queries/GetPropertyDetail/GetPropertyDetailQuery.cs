@@ -1,5 +1,5 @@
 using TestMillion.Application.Common.Queries;
-using TestMillion.Application.DTOs;
+using TestMillion.Application.Features.Properties.DTOs.Response;
 
 namespace TestMillion.Application.Features.Properties.Cqrs.Queries.GetPropertyDetail;
 

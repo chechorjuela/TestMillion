@@ -1,5 +1,7 @@
 using TestMillion.Application.Common.Response;
-using TestMillion.Application.DTOs;
+using TestMillion.Application.Features.Properties.DTOs.Response;
+using TestMillion.Application.Features.Owners.DTOs.Response;
+using TestMillion.Application.Features.PropertyImage.DTOs.Response;
 using TestMillion.Domain.Entities;
 using TestMillion.Domain.Interfaces.Base;
 using PropertyImage = TestMillion.Domain.Entities.PropertyImage;
@@ -39,8 +41,8 @@ public class GetPropertyDetailQueryHandler : UseCaseHandler, IRequestHandler<Get
 
         var propertyDetailDto = _mapper.Map<PropertyDetailDto>(property);
         propertyDetailDto.MainImage = propertyImages.FirstOrDefault(i => i.Enabled)?.File;
-        propertyDetailDto.Owner = owner == null ? null : _mapper.Map<OwnerDto>(owner);
-        propertyDetailDto.Images = _mapper.Map<IEnumerable<PropertyImageDto>>(propertyImages);
+        propertyDetailDto.Owner = owner == null ? null : _mapper.Map<OwnerResponseDto>(owner);
+        propertyDetailDto.Images = _mapper.Map<IEnumerable<PropertyImageResponseDto>>(propertyImages);
         
         return propertyDetailDto;
     }

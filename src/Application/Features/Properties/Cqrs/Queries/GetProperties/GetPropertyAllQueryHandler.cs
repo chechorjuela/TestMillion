@@ -1,6 +1,5 @@
 using TestMillion.Application.Common.Response;
 using TestMillion.Application.Common.Response.Result;
-using TestMillion.Application.DTOs;
 using TestMillion.Application.Features.Properties.DTOs.Response;
 using TestMillion.Domain.Entities;
 using TestMillion.Domain.Interfaces;

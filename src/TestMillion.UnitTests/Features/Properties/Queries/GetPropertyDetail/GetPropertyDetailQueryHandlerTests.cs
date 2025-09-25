@@ -1,5 +1,5 @@
 using FluentAssertions;
-using TestMillion.Application.DTOs;
+using TestMillion.Application.Features.Properties.DTOs.Response;
 using TestMillion.Application.Features.Properties.Cqrs.Queries.GetPropertyDetail;
 using TestMillion.Domain.Entities;
 using TestMillion.Domain.Interfaces.Base;
@@ -53,20 +53,21 @@ public class GetPropertyDetailQueryHandlerTests : PropertyTestBase
             new Domain.Entities.PropertyImage("image2.jpg", false, property.Id)
         };
 
-        var ownerDto = new OwnerDto
+        var ownerDto = new TestMillion.Application.Features.Owners.DTOs.Response.OwnerResponseDto
         {
             Id = "owner-id",
             Name = owner.Name,
             Address = owner.Address,
-            Birthdate = owner.Birthdate
+            Birthdate = owner.Birthdate,
+            Photo = owner.Photo
         };
 
-        var imagesDtos = images.Select(i => new PropertyImageDto
+        var imagesDtos = images.Select(i => new TestMillion.Application.Features.PropertyImage.DTOs.Response.PropertyImageResponseDto
         {
             Id = i.Id,
-            File = i.File,
+            FileUrl = i.File,
             Enabled = i.Enabled,
-            IdProperty = i.IdProperty
+            Property = null
         }).ToList();
 
         var propertyDetailDto = new PropertyDetailDto
@@ -99,11 +100,11 @@ public class GetPropertyDetailQueryHandlerTests : PropertyTestBase
             .Returns(propertyDetailDto);
 
         MockPropertyMapper
-            .Setup(x => x.Map<OwnerDto>(owner))
+            .Setup(x => x.Map<TestMillion.Application.Features.Owners.DTOs.Response.OwnerResponseDto>(owner))
             .Returns(ownerDto);
 
         MockPropertyMapper
-            .Setup(x => x.Map<IEnumerable<PropertyImageDto>>(images))
+            .Setup(x => x.Map<IEnumerable<TestMillion.Application.Features.PropertyImage.DTOs.Response.PropertyImageResponseDto>>(images))
             .Returns(imagesDtos);
 
         // Act

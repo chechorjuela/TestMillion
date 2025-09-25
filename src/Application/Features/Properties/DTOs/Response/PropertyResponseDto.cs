@@ -1,4 +1,4 @@
-using OwnerDto = TestMillion.Application.Features.Owners.DTOs.Response.OwnerResponseDto;
+using TestMillion.Application.Features.Owners.DTOs.Response;
 
 namespace TestMillion.Application.Features.Properties.DTOs.Response;
 
@@ -11,6 +11,6 @@ public class PropertyResponseDto
     public string CodeInternal { get; set; } = string.Empty;
     public int Year { get; set; }
     public string IdOwner { get; set; } = string.Empty;
-    public OwnerDto? Owner { get; set; }
+    public OwnerResponseDto? Owner { get; set; }
     public string? MainImage { get; set; }
 }

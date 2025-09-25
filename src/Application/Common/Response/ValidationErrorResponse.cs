@@ -1,4 +1,3 @@
-using TestMillion.Application.Common.Results;
 
 namespace TestMillion.Application.Common.Response;
 
