@@ -25,7 +25,7 @@ public class PropertyRepository : BaseRepository<Property>, IPropertyRepository
         return await FindAsync(p => p.IdOwner == ownerId);
     }
 
-    public override async Task<(IEnumerable<Property> Items, int TotalCount)> GetPagedAsync(PaginationModel pagination, FilterModel filter)
+    public override async Task<PaginatedResponse<Property>> GetPagedAsync(PaginationModel pagination, FilterModel filter)
     {
         var query = Collection.AsQueryable();
 
@@ -70,7 +70,7 @@ public class PropertyRepository : BaseRepository<Property>, IPropertyRepository
             .Take(pagination.PageSize)
             .ToListAsync();
 
-        return (items, total);
+        return PaginatedResponse<Property>.Create(items, total, pagination.PageNumber, pagination.PageSize);
     }
 
     public async Task<bool> IsCodeInternalUniqueAsync(string codeInternal, string? excludeId = null)

@@ -23,9 +23,9 @@ public class GetAllOwnerCommandHandler : UseCaseHandler, IRequestHandler<GetAllO
   {
     var paginationModel = _mapper.Map<PaginationModel>(request.Pagination);
     var filterModel = _mapper.Map<FilterModel>(request.Filter);
-    var (items, total) = await _ownerRepository.GetPagedAsync(paginationModel, filterModel);
-    var result = this._mapper.Map<List<OwnerResponseDto>>(items);
-    var meta = new PaginationMetadataDto(total, request.Pagination.PageSize, request.Pagination.PageNumber);
-    return PagedResponse<List<OwnerResponseDto>>.Success(result, "Owners fetched successfully", meta);
+    var result = await _ownerRepository.GetPagedAsync(paginationModel, filterModel);
+    var dtos = this._mapper.Map<List<OwnerResponseDto>>(result.Items);
+    var meta = new PaginationMetadataDto(result.TotalCount, result.PageSize, result.CurrentPage);
+    return PagedResponse<List<OwnerResponseDto>>.Success(dtos, "Owners fetched successfully", meta);
   }
 }

@@ -33,10 +33,10 @@ public class GetAllPropertyImageQueryHandler : UseCaseHandler,
   {
     var paginationModel = _mapper.Map<PaginationModel>(request.Pagination);
     var filterModel = _mapper.Map<FilterModel>(request.Filter);
-    var (items, total) = await _propertyImageRepository.GetPagedAsync(paginationModel, filterModel);
-    var response = this._mapper.Map<List<PropertyImageResponseDto>>(items);
+    var result = await _propertyImageRepository.GetPagedAsync(paginationModel, filterModel);
+    var response = this._mapper.Map<List<PropertyImageResponseDto>>(result.Items);
 
-    foreach (var (dto, entity) in response.Zip(items, (dto, entity) => (dto, entity)))
+    foreach (var (dto, entity) in response.Zip(result.Items, (dto, entity) => (dto, entity)))
     {
         var property = await _propertyRepository.GetByIdAsync(entity.IdProperty);
         if (property != null)
@@ -45,7 +45,7 @@ public class GetAllPropertyImageQueryHandler : UseCaseHandler,
         }
     }
 
-    var meta = new PaginationMetadataDto(total, request.Pagination.PageSize, request.Pagination.PageNumber);
+    var meta = new PaginationMetadataDto(result.TotalCount, result.PageSize, result.CurrentPage);
     return PagedResponse<List<PropertyImageResponseDto>>.Success(response, "Property images fetched successfully", meta);
   }
 }

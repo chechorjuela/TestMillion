@@ -43,7 +43,7 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : class, IE
     return await Collection.Find(predicate).ToListAsync();
   }
 
-  public virtual async Task<(IEnumerable<T> Items, int TotalCount)> GetPagedAsync(PaginationModel pagination)
+  public virtual async Task<PaginatedResponse<T>> GetPagedAsync(PaginationModel pagination)
   {
     var skip = (pagination.PageNumber - 1) * pagination.PageSize;
     var total = (int)await Collection.CountDocumentsAsync(_ => true);
@@ -52,10 +52,10 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : class, IE
       .Skip(skip)
       .Limit(pagination.PageSize)
       .ToListAsync();
-    return (items, total);
+    return PaginatedResponse<T>.Create(items, total, pagination.PageNumber, pagination.PageSize);
   }
 
-  public virtual async Task<(IEnumerable<T> Items, int TotalCount)> GetPagedAsync(PaginationModel pagination, FilterModel filter)
+  public virtual async Task<PaginatedResponse<T>> GetPagedAsync(PaginationModel pagination, FilterModel filter)
   {
     var query = Collection.AsQueryable();
 
@@ -77,7 +77,7 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : class, IE
       .Take(pagination.PageSize)
       .ToListAsync();
 
-    return (items, (int)total);
+    return PaginatedResponse<T>.Create(items, (int)total, pagination.PageNumber, pagination.PageSize);
   }
 
   public virtual async Task<T?> GetByIdAsync(string id)

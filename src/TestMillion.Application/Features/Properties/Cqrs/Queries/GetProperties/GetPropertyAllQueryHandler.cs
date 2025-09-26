@@ -33,20 +33,20 @@ public class GetPropertyAllQueryHandler : UseCaseHandler,
   {
     var paginationModel = _mapper.Map<PaginationModel>(request.Pagination);
     var filterModel = _mapper.Map<FilterModel>(request.Filter);
-    var (items, total) = await _propertyRepository.GetPagedAsync(paginationModel, filterModel);
+    var result = await _propertyRepository.GetPagedAsync(paginationModel, filterModel);
     var images = await _imageRepository.GetAllAsync();
     var enabledImages = images.Where(i => i.Enabled).ToList();
 
-    var propertyDtos = _mapper.Map<List<PropertyResponseDto>>(items.ToList());
+    var propertyDtos = _mapper.Map<List<PropertyResponseDto>>(result.Items.ToList());
 
-    foreach (var (dto, entity) in propertyDtos.Zip(items, (dto, entity) => (dto, entity)))
+    foreach (var (dto, entity) in propertyDtos.Zip(result.Items, (dto, entity) => (dto, entity)))
     {
       dto.MainImage = enabledImages.FirstOrDefault(i => i.IdProperty == dto.Id)?.File;
       var owner = await _ownerRepository.GetByIdAsync(entity.IdOwner);
       dto.Owner = _mapper.Map<Owners.DTOs.Response.OwnerResponseDto>(owner);
     }
 
-    var metadata = new PaginationMetadataDto(total, request.Pagination.PageSize, request.Pagination.PageNumber);
+    var metadata = new PaginationMetadataDto(result.TotalCount, result.PageSize, result.CurrentPage);
     return PagedResponse<List<PropertyResponseDto>>.Success(propertyDtos, "Properties fetched successfully", metadata);
   }
 }

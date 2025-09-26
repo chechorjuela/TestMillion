@@ -1,129 +1,224 @@
-# Million Properties API
+# TestMillion Client
 
-API para gestionar propiedades inmobiliarias utilizando .NET, MongoDB y React/Next.js.
+Frontend application built with React + TypeScript + Vite for the TestMillion project.
 
-## Tecnologías Utilizadas
+## 🚀 Technology Stack
 
-- Backend: .NET 8
-- Base de datos: MongoDB
-- Caché: Redis
-- Frontend: Next.js (en desarrollo)
-- Pruebas: NUnit
+- **React 18**: Modern JavaScript library for building user interfaces
+- **TypeScript**: Static type-checking for enhanced development experience
+- **Vite**: Next generation frontend tooling for fast development
+- **Redux Toolkit**: State management solution
+- **React Router**: Navigation and routing
+- **TailwindCSS**: Utility-first CSS framework
+- **Headless UI**: Unstyled, accessible UI components
+- **Framer Motion**: Animation library
+- **Vitest**: Unit testing framework
+- **Testing Library**: Testing utilities
 
-## Requisitos Previos
+## 📁 Project Structure
 
-- .NET 8 SDK
-- MongoDB Server
-- Redis Server
-- Node.js y npm (para el frontend)
-
-## Configuración
-
-1. Clone el repositorio:
-   ```bash
-   git clone <repository-url>
-   cd TestMillion
-   ```
-
-2. Configure la base de datos MongoDB:
-   - Asegúrese de que MongoDB está ejecutándose
-   - La base de datos se creará automáticamente al iniciar la aplicación
-
-3. Configure Redis:
-   - Asegúrese de que Redis está ejecutándose
-   - El caché se configurará automáticamente
-
-4. Configure los ajustes de la aplicación:
-   - Actualice `appsettings.json` con sus configuraciones:
-   ```json
-   {
-     "MongoDb": {
-       "ConnectionString": "mongodb://localhost:27017",
-       "DatabaseName": "MillionProperties"
-     },
-     "Redis": {
-       "ConnectionString": "localhost:6379"
-     }
-   }
-   ```
-
-## Ejecución
-
-1. Ejecute la API:
-   ```bash
-   cd src/Presentation
-   dotnet run
-   ```
-
-2. Acceda a la documentación de la API:
-   - Swagger UI: http://localhost:5000/swagger
-   - API endpoint base: http://localhost:5000/api
-
-## Estructura de la Base de Datos
-
-### Colecciones
-
-1. `properties`
-   - `Id`: string (ObjectId)
-   - `IdOwner`: string (referencia a owners)
-   - `Name`: string
-   - `Address`: string
-   - `Price`: decimal
-   - `CodeInternal`: string
-   - `Year`: int
-
-2. `owners`
-   - `Id`: string (ObjectId)
-   - `Name`: string
-   - `Address`: string
-
-3. `propertyimages`
-   - `Id`: string (ObjectId)
-   - `IdProperty`: string (referencia a properties)
-   - `File`: string (ruta del archivo)
-   - `Enabled`: boolean
-
-## Endpoints de la API
-
-### Propiedades
-
-1. `GET /api/properties`
-   - Lista propiedades con filtros opcionales
-   - Parámetros:
-     - `name`: string (opcional)
-     - `address`: string (opcional)
-     - `minPrice`: decimal (opcional)
-     - `maxPrice`: decimal (opcional)
-     - `page`: int (por defecto: 1)
-     - `pageSize`: int (por defecto: 10)
-     - `sortBy`: string (opcional)
-     - `ascending`: boolean (por defecto: true)
-
-2. `GET /api/properties/{id}`
-   - Obtiene los detalles de una propiedad específica
-
-3. `POST /api/properties`
-   - Crea una nueva propiedad
-   - Body: PropertyDto
-
-## Pruebas
-
-Ejecute las pruebas unitarias:
-```bash
-cd tests/TestMillion.Tests
-dotnet test
+```
+src/
+├── components/           # Reusable UI components
+│   ├── atoms/           # Basic building blocks (buttons, inputs, etc.)
+│   ├── molecules/       # Combinations of atoms
+│   ├── organisms/       # Complex components
+│   └── templates/       # Page layouts
+├── config/              # Configuration files
+├── features/           # Feature-based modules
+│   ├── propertyImages/
+│   ├── properties/
+│   └── ...
+├── hooks/              # Custom React hooks
+├── services/           # API and other services
+├── store/             # Redux store configuration
+├── test/              # Test utilities and setup
+├── types/             # TypeScript type definitions
+└── App.tsx            # Application root component
 ```
 
-## Optimizaciones Implementadas
+### 🏗️ Architecture
 
-1. Índices de MongoDB para búsquedas eficientes
-2. Sistema de caché con Redis
-3. Paginación para grandes conjuntos de datos
-4. Filtros optimizados
-5. Compresión de respuestas HTTP
+The project follows a combination of atomic design and feature-based architecture:
 
-## Contacto
+1. **Atomic Design Components**:
+   - `atoms`: Basic components like Button, Input, Logo
+   - `molecules`: Composite components like ActionButtons, PropertyForm
+   - `organisms`: Complex components like ActionModal
+   - `templates`: Page layouts and structures
 
-Para acceso al repositorio o consultas:
-- crios@millionluxury.com
-- amorau@millionluxury.com
+2. **Feature-based Organization**:
+   Each feature (e.g., propertyImages) contains:
+   - Pages
+   - Components specific to the feature
+   - Redux slice
+   - Services
+   - Types
+
+3. **Global State Management**:
+   - Uses Redux Toolkit for state management
+   - Slices for each feature
+   - Typed actions and reducers
+
+4. **Type Safety**:
+   - Comprehensive TypeScript types
+   - Type-safe API calls
+   - Strongly typed Redux store
+
+## 📦 Main Dependencies
+
+### Core
+- `@reduxjs/toolkit`: State management
+- `react-router-dom`: Routing
+- `axios`: HTTP client
+- `clsx`: CSS class construction
+
+### UI & Styling
+- `@headlessui/react`: Accessible UI components
+- `@tailwindcss/forms`: Form styling
+- `framer-motion`: Animations
+- `react-icons`: Icon library
+
+### Development
+- `typescript`: Type checking
+- `vite`: Build tool
+- `eslint`: Code linting
+- `prettier`: Code formatting
+
+### Testing
+- `vitest`: Testing framework
+- `@testing-library/react`: React testing utilities
+- `@testing-library/jest-dom`: DOM testing utilities
+- `@testing-library/user-event`: User event simulation
+
+## 🔧 Setup & Development
+
+1. **Installation**:
+   ```bash
+   npm install
+   ```
+
+2. **Development**:
+   ```bash
+   npm run dev
+   ```
+
+3. **Build**:
+   ```bash
+   npm run build
+   ```
+
+4. **Preview Production Build**:
+   ```bash
+   npm run preview
+   ```
+
+## 🧪 Testing
+
+The project uses Vitest and Testing Library for unit testing.
+
+1. **Run Tests**:
+   ```bash
+   npm test
+   ```
+
+2. **Run Tests with Coverage**:
+   ```bash
+   npm run test:coverage
+   ```
+
+3. **Run Tests with UI**:
+   ```bash
+   npm run test:ui
+   ```
+
+### Test Structure
+
+Tests are co-located with their components:
+```
+src/
+├── components/
+│   └── atoms/
+│       ├── Button.tsx
+│       └── __tests__/
+│           └── Button.test.tsx
+```
+
+## 🔍 Code Quality
+
+- ESLint configuration for TypeScript and React
+- Prettier for consistent code formatting
+- Pre-commit hooks for code quality checks
+
+## 📚 Component Documentation
+
+### Atoms
+- `Button`: Reusable button component with variants
+- `Input`: Form input with label and error handling
+- `Modal`: Dialog component with accessibility features
+
+### Molecules
+- `ActionButtons`: Group of action buttons (edit, delete, etc.)
+- `Pagination`: Page navigation component
+- `PropertyForm`: Form for property data
+
+### Organisms
+- `ActionModal`: Modal for CRUD operations
+- `DataTable`: Generic table component with sorting and pagination
+
+### Templates
+- `PageLayout`: Standard page layout with header and content areas
+
+## 🔐 Environment Variables
+
+Create a `.env` file in the root directory:
+
+```env
+VITE_API_URL=http://localhost:3000/api
+```
+
+## 🤝 Contributing
+
+1. Branch naming convention: `feature/name` or `fix/name`
+2. Commit messages follow conventional commits
+3. All code must have corresponding tests
+4. PR template must be filled out completely
+
+## 📝 Scripts
+
+- `dev`: Start development server
+- `build`: Build for production
+- `preview`: Preview production build
+- `test`: Run tests
+- `test:coverage`: Run tests with coverage
+- `test:ui`: Run tests with UI
+- `lint`: Lint code
+- `format`: Format code with prettier
+
+## 🚀 Deployment
+
+Build the application for production:
+
+```bash
+npm run build
+```
+
+The built files will be in the `dist` directory, ready for deployment.
+
+## 🐛 Common Issues & Solutions
+
+1. **Missing Peer Dependencies**:
+   ```bash
+   npm install -D @types/react @types/react-dom
+   ```
+
+2. **Type Errors**:
+   - Ensure TypeScript version matches in package.json
+   - Run `npm install` to update dependencies
+
+## 📈 Performance Considerations
+
+- Code splitting with React.lazy()
+- Memoization with useMemo and useCallback
+- Image optimization with modern formats
+- Tailwind CSS purging for production

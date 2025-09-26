@@ -58,9 +58,13 @@ public static class MongoConfig
 
     private static void RegisterSerializers()
     {
-        if (!BsonSerializer.TryRegisterSerializer(new Serializers.DateOnlySerializer()))
+        try
         {
-            throw new Exception("Failed to register DateOnly serializer");
+            BsonSerializer.TryRegisterSerializer(new Serializers.DateOnlySerializer());
+        }
+        catch (Exception ex) when (ex.Message.Contains("already a different serializer registered"))
+        {
+            // Serializer already registered, ignore
         }
     }
 }

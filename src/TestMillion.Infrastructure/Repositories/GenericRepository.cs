@@ -95,7 +95,7 @@ public class GenericRepository<T> : IBaseRepository<T> where T : IEntity
     }
 
     // New interface implementations
-    public async Task<(IEnumerable<T> Items, int TotalCount)> GetPagedAsync(PaginationModel pagination)
+    public async Task<PaginatedResponse<T>> GetPagedAsync(PaginationModel pagination)
     {
         var skip = (pagination.PageNumber - 1) * pagination.PageSize;
         var total = (int)await _collection.CountDocumentsAsync(_ => true);
@@ -104,10 +104,10 @@ public class GenericRepository<T> : IBaseRepository<T> where T : IEntity
             .Skip(skip)
             .Limit(pagination.PageSize)
             .ToListAsync();
-        return (items, total);
+        return PaginatedResponse<T>.Create(items, total, pagination.PageNumber, pagination.PageSize);
     }
 
-    public async Task<(IEnumerable<T> Items, int TotalCount)> GetPagedAsync(PaginationModel pagination, FilterModel filter)
+    public async Task<PaginatedResponse<T>> GetPagedAsync(PaginationModel pagination, FilterModel filter)
     {
         var query = _collection.AsQueryable();
 
@@ -124,6 +124,6 @@ public class GenericRepository<T> : IBaseRepository<T> where T : IEntity
             .Take(pagination.PageSize)
             .ToListAsync();
 
-        return (items, total);
+        return PaginatedResponse<T>.Create(items, total, pagination.PageNumber, pagination.PageSize);
     }
 }

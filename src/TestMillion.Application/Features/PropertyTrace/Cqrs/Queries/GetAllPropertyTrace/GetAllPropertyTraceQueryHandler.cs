@@ -42,20 +42,20 @@ public class GetAllPropertyTraceQueryHandler: UseCaseHandler,
       var filterModel = _mapper.Map<FilterModel>(request.Filter);
       
       _logger.LogInformation("Fetching property traces from repository");
-      var (items, total) = await _propertyTraceRepository.GetPagedAsync(paginationModel, filterModel);
+      var result = await _propertyTraceRepository.GetPagedAsync(paginationModel, filterModel);
       
-      if (!items.Any())
+      if (!result.Items.Any())
       {
         _logger.LogInformation("No property traces found");
         var emptyMeta = new PaginationMetadataDto(0, request.Pagination.PageSize, request.Pagination.PageNumber);
         return PagedResponse<List<PropertyTraceResponseDto>>.Success(new List<PropertyTraceResponseDto>(), "No property traces found", emptyMeta);
       }
 
-      _logger.LogInformation("Mapping {Count} property traces to DTOs", items.Count());
-      var result = _mapper.Map<List<PropertyTraceResponseDto>>(items);
+      _logger.LogInformation("Mapping {Count} property traces to DTOs", result.Items.Count());
+      var dtos = _mapper.Map<List<PropertyTraceResponseDto>>(result.Items);
 
       _logger.LogInformation("Loading related properties for property traces");
-      foreach (var (dto, entity) in result.Zip(items, (dto, entity) => (dto, entity)))
+      foreach (var (dto, entity) in dtos.Zip(result.Items, (dto, entity) => (dto, entity)))
       {
           var property = await _propertyRepository.GetByIdAsync(entity.IdProperty);
           if (property != null)
@@ -64,9 +64,9 @@ public class GetAllPropertyTraceQueryHandler: UseCaseHandler,
           }
       }
 
-      var meta = new PaginationMetadataDto(total, request.Pagination.PageSize, request.Pagination.PageNumber);
-      _logger.LogInformation("Successfully retrieved {Count} property traces", result.Count);
-      return PagedResponse<List<PropertyTraceResponseDto>>.Success(result, "Property traces fetched successfully", meta);
+      var meta = new PaginationMetadataDto(result.TotalCount, result.PageSize, result.CurrentPage);
+      _logger.LogInformation("Successfully retrieved {Count} property traces", dtos.Count);
+      return PagedResponse<List<PropertyTraceResponseDto>>.Success(dtos, "Property traces fetched successfully", meta);
     }
     catch (Exception ex)
     {
