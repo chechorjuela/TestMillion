@@ -1,0 +1,126 @@
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { fetchPropertyTraces } from '../../features/propertyTraces/propertyTraceSlice';
+import { propertyTraceService } from '../../features/propertyTraces/propertyTraceService';
+import { Modal } from "../atoms/Modal";
+import { Button } from '../atoms/Button';
+import { Input } from '../atoms/Input';
+import type {AppDispatch} from '../../store/store';
+
+interface AddPropertyTraceModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export const AddPropertyTraceModal = ({ isOpen, onClose }: AddPropertyTraceModalProps) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const [formData, setFormData] = useState({
+    name: '',
+    value: '',
+    tax: '',
+    dateSale: '',
+    idProperty: '',
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await propertyTraceService.createPropertyTrace({
+        name: formData.name,
+        value: parseFloat(formData.value),
+        tax: parseFloat(formData.tax),
+        dateSale: formData.dateSale, // Send as YYYY-MM-DD
+        idProperty: formData.idProperty,
+      });
+
+      // Recargar la lista
+      dispatch(fetchPropertyTraces({ PageNumber: 1, PageSize: 10 }));
+      onClose();
+      
+      // Limpiar el formulario
+      setFormData({
+        name: '',
+        value: '',
+        tax: '',
+        dateSale: '',
+        idProperty: '',
+      });
+    } catch (error) {
+      console.error('Error creating property trace:', error);
+    }
+  };
+
+  return (
+    <Modal isOpen={isOpen} onClose={onClose} title="Add Property Trace">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <Input
+            label="Name"
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div>
+          <Input
+            label="Value"
+            type="number"
+            name="value"
+            value={formData.value}
+            onChange={handleInputChange}
+            required
+            min="0"
+            step="0.01"
+          />
+        </div>
+        <div>
+          <Input
+            label="Tax"
+            type="number"
+            name="tax"
+            value={formData.tax}
+            onChange={handleInputChange}
+            required
+            min="0"
+            step="0.01"
+          />
+        </div>
+        <div>
+          <Input
+            label="Date of Sale"
+            type="date"
+            name="dateSale"
+            value={formData.dateSale}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div>
+          <Input
+            label="Property ID"
+            type="text"
+            name="idProperty"
+            value={formData.idProperty}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div className="flex justify-end space-x-2">
+          <Button type="button" variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button type="submit">
+            Add Property Trace
+          </Button>
+        </div>
+      </form>
+    </Modal>
+  );
+};
