@@ -79,11 +79,9 @@ public class GetPropertyAllQueryHandlerTests : PropertyTestBase
             .Setup(x => x.Map<FilterModel>(query.Filter))
             .Returns(filterModel);
 
-        var expectedResult = (Items: (IEnumerable<Property>)properties, TotalCount: properties.Count);
-
         MockPropertyRepo
             .Setup(x => x.GetPagedAsync(It.IsAny<PaginationModel>(), It.IsAny<FilterModel>()))
-            .ReturnsAsync(expectedResult);
+            .ReturnsAsync(PaginatedResponse<Property>.Create(properties, properties.Count, 1, 10));
 
         _mockImageRepo
             .Setup(x => x.GetAllAsync())
@@ -145,11 +143,11 @@ public class GetPropertyAllQueryHandlerTests : PropertyTestBase
             .Setup(x => x.Map<List<PropertyResponseDto>>(It.IsAny<List<Property>>()))
             .Returns(new List<PropertyResponseDto>());
 
-        var emptyResult = (Items: (IEnumerable<Property>)new List<Property>(), TotalCount: 0);
+        var emptyList = new List<Property>();
 
         MockPropertyRepo
             .Setup(x => x.GetPagedAsync(It.IsAny<PaginationModel>(), It.IsAny<FilterModel>()))
-            .ReturnsAsync(emptyResult);
+            .ReturnsAsync(PaginatedResponse<Property>.Create(emptyList, 0, 1, 10));
 
         _mockImageRepo
             .Setup(x => x.GetAllAsync())

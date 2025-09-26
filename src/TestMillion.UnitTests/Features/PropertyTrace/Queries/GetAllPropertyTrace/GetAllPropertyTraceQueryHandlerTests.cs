@@ -42,7 +42,7 @@ public class GetAllPropertyTraceQueryHandlerTests : TestBase
         var emptyList = new List<Domain.Entities.PropertyTrace>();
         MockPropertyTraceRepository
             .Setup(x => x.GetPagedAsync(It.IsAny<PaginationModel>(), It.IsAny<FilterModel>()))
-            .ReturnsAsync((emptyList, 0));
+            .ReturnsAsync(PaginatedResponse<Domain.Entities.PropertyTrace>.Create(emptyList, 0, 1, 10));
 
         // Act
         var result = await _handler.Handle(query, CancellationToken.None);
@@ -52,7 +52,8 @@ public class GetAllPropertyTraceQueryHandlerTests : TestBase
         result.Data.Should().BeEmpty();
         result.Message.Should().Be("No property traces found");
 result.Status.Should().Be(200);
-        result.Metadata.TotalCount.Should().Be(0);
+        result.Metadata.Should().NotBeNull();
+        result.Metadata!.TotalCount.Should().Be(0);
     }
 
     [Fact]
@@ -89,7 +90,7 @@ result.Status.Should().Be(200);
 
         MockPropertyTraceRepository
             .Setup(x => x.GetPagedAsync(It.IsAny<PaginationModel>(), It.IsAny<FilterModel>()))
-            .ReturnsAsync((propertyTraces, 1));
+            .ReturnsAsync(PaginatedResponse<Domain.Entities.PropertyTrace>.Create(propertyTraces, propertyTraces.Count, 1, 10));
 
         MockPropertyRepository
             .Setup(x => x.GetByIdAsync(It.IsAny<string>()))
@@ -112,7 +113,8 @@ result.Status.Should().Be(200);
         result.Data.Should().HaveCount(1);
         result.Status.Should().Be(200);
         result.Message.Should().Be("Property traces fetched successfully");
-        result.Metadata.TotalCount.Should().Be(1);
+        result.Metadata.Should().NotBeNull();
+        result.Metadata!.TotalCount.Should().Be(1);
 
         var firstItem = result.Data.First();
         firstItem.Name.Should().Be("Test Trace");
@@ -149,7 +151,7 @@ result.Status.Should().Be(200);
                 It.IsAny<EventId>(),
                 It.Is<It.IsAnyType>((v, t) => true),
                 It.IsAny<Exception>(),
-                It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)),
+                It.Is<Func<It.IsAnyType, Exception?, string>>((v, t) => true)),
             Times.Once);
     }
 }

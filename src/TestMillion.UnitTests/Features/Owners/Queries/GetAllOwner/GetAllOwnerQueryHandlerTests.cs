@@ -55,11 +55,9 @@ public class GetAllOwnerQueryHandlerTests : OwnerTestBase
             .Setup(x => x.Map<FilterModel>(query.Filter))
             .Returns(filterModel);
 
-        var expectedResult = (Items: (IEnumerable<Owner>)owners, TotalCount: owners.Count);
-
         MockOwnerRepo
             .Setup(x => x.GetPagedAsync(It.IsAny<PaginationModel>(), It.IsAny<FilterModel>()))
-            .ReturnsAsync(expectedResult);
+            .ReturnsAsync(PaginatedResponse<Owner>.Create(owners, owners.Count, 1, 10));
 
         MockOwnerMapper
             .Setup(x => x.Map<List<OwnerResponseDto>>(It.IsAny<List<Owner>>()))
@@ -101,11 +99,11 @@ public class GetAllOwnerQueryHandlerTests : OwnerTestBase
             .Setup(x => x.Map<FilterModel>(query.Filter))
             .Returns(filterModel);
 
-        var emptyResult = (Items: (IEnumerable<Owner>)new List<Owner>(), TotalCount: 0);
+        var emptyList = new List<Owner>();
 
         MockOwnerRepo
             .Setup(x => x.GetPagedAsync(It.IsAny<PaginationModel>(), It.IsAny<FilterModel>()))
-            .ReturnsAsync(emptyResult);
+            .ReturnsAsync(PaginatedResponse<Owner>.Create(emptyList, 0, 1, 10));
 
         MockOwnerMapper
             .Setup(x => x.Map<List<OwnerResponseDto>>(It.IsAny<List<Owner>>()))

@@ -63,7 +63,7 @@ public class CreateOwnerCommandHandlerTests : OwnerTestBase
         
         MockOwnerRepo
             .Setup(x => x.GetByNameAsync(command.Name))
-            .ReturnsAsync((Owner)null);
+            .ReturnsAsync((Owner?)null);
 
         MockOwnerMapper
             .Setup(x => x.Map<Owner>(command))
@@ -71,7 +71,7 @@ public class CreateOwnerCommandHandlerTests : OwnerTestBase
 
         MockOwnerRepo
             .Setup(x => x.AddAsync(It.IsAny<Owner>()))
-            .ReturnsAsync((Owner)null);
+            .ReturnsAsync((Owner?)null);
 
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
@@ -106,7 +106,7 @@ public class CreateOwnerCommandHandlerTests : OwnerTestBase
 
         MockOwnerRepo
             .Setup(x => x.GetByNameAsync(command.Name))
-            .ReturnsAsync((Owner)null);
+            .ReturnsAsync((Owner?)null);
 
         MockOwnerMapper
             .Setup(x => x.Map<Owner>(command))

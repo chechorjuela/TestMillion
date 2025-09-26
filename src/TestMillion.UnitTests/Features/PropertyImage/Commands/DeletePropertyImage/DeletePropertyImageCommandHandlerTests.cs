@@ -51,7 +51,7 @@ public class DeletePropertyImageCommandHandlerTests : PropertyImageTestBase
 
         MockPropertyImageRepo
             .Setup(x => x.GetByIdAsync(command.Id))
-            .ReturnsAsync((Domain.Entities.PropertyImage)null);
+            .ReturnsAsync((Domain.Entities.PropertyImage?)null);
 
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);

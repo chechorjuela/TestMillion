@@ -105,8 +105,8 @@ public class CreatePropertyCommandHandlerTests : PropertyTestBase
             .Returns(property);
 
         MockPropertyRepo
-            .Setup(x => x.AddAsync(property))
-            .ReturnsAsync((Property)null);
+            .Setup(x => x.AddAsync(It.IsAny<Property>()))
+            .ReturnsAsync((Property?)null);
 
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);

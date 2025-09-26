@@ -40,7 +40,7 @@ public class UpdatePropertyTraceCommandHandlerTests : TestBase
 
         MockPropertyTraceRepository
             .Setup(x => x.GetByIdAsync(It.IsAny<string>()))
-            .ReturnsAsync((Domain.Entities.PropertyTrace)null);
+            .ReturnsAsync((Domain.Entities.PropertyTrace?)null);
 
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
@@ -171,7 +171,7 @@ result.StatusCode.Should().Be(ResultType.Invalid);
                 It.IsAny<EventId>(),
                 It.Is<It.IsAnyType>((v, t) => true),
                 It.IsAny<Exception>(),
-                It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)),
+                It.Is<Func<It.IsAnyType, Exception?, string>>((v, t) => true)),
             Times.Once);
     }
 }

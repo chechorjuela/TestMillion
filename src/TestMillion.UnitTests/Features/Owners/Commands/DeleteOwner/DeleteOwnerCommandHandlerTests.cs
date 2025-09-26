@@ -29,7 +29,7 @@ public class DeleteOwnerCommandHandlerTests : OwnerTestBase
 
         MockOwnerRepo
             .Setup(x => x.GetByIdAsync(command.Id))
-            .ReturnsAsync((Owner)null);
+            .ReturnsAsync((Owner?)null);
 
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);

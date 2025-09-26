@@ -100,7 +100,7 @@ public class GetByPropertyImageQueryHandlerTests : PropertyImageTestBase
 
         MockPropertyImageRepo
             .Setup(x => x.GetByIdAsync(query.Id))
-            .ReturnsAsync((Domain.Entities.PropertyImage)null);
+            .ReturnsAsync((Domain.Entities.PropertyImage?)null);
 
         // Act
         var result = await _handler.Handle(query, CancellationToken.None);

@@ -67,7 +67,7 @@ public class GetPropertyDetailQueryHandlerTests : PropertyTestBase
             Id = i.Id,
             FileUrl = i.File,
             Enabled = i.Enabled,
-            Property = null
+            Property = default
         }).ToList();
 
         var propertyDetailDto = new PropertyDetailDto
@@ -134,7 +134,8 @@ public class GetPropertyDetailQueryHandlerTests : PropertyTestBase
 
         _mockPropertyRepo
             .Setup(x => x.GetByIdAsync(query.Id))
-            .ReturnsAsync((Property)null);
+            .ReturnsAsync((Property?)null);
+
 
         // Act & Assert
         await Assert.ThrowsAsync<KeyNotFoundException>(() =>
@@ -174,7 +175,7 @@ public class GetPropertyDetailQueryHandlerTests : PropertyTestBase
 
         _mockOwnerRepo
             .Setup(x => x.GetByIdAsync(property.IdOwner))
-            .ReturnsAsync((Owner)null);
+            .ReturnsAsync((Owner?)null);
 
         _mockImageRepo
             .Setup(x => x.GetAllAsync())

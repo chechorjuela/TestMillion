@@ -92,7 +92,7 @@ public class UpdatePropertyImageCommandHandlerTests : PropertyImageTestBase
 
         MockPropertyImageRepo
             .Setup(x => x.GetByIdAsync(command.Id))
-            .ReturnsAsync((Domain.Entities.PropertyImage)null);
+            .ReturnsAsync((Domain.Entities.PropertyImage?)null);
 
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
@@ -144,7 +144,7 @@ public class UpdatePropertyImageCommandHandlerTests : PropertyImageTestBase
                 It.IsAny<EventId>(),
                 It.Is<It.IsAnyType>((v, t) => true),
                 It.IsAny<Exception>(),
-                It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)),
+                It.Is<Func<It.IsAnyType, Exception?, string>>((v, t) => true)),
             Times.Once);
     }
 }

@@ -57,7 +57,7 @@ public class DeletePropertyCommandHandlerTests : PropertyTestBase
 
         MockPropertyRepo
             .Setup(x => x.GetByIdAsync(command.Id))
-            .ReturnsAsync((Property)null);
+            .ReturnsAsync((Property?)null);
 
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
