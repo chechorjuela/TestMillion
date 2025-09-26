@@ -300,7 +300,7 @@ Core entities in the system:
 
 ### Prerequisites
 
-- .NET 7 SDK
+- .NET 8 SDK
 - MongoDB
 - Docker (optional)
 
