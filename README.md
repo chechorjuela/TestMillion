@@ -222,3 +222,194 @@ The built files will be in the `dist` directory, ready for deployment.
 - Memoization with useMemo and useCallback
 - Image optimization with modern formats
 - Tailwind CSS purging for production
+
+# TestMillion Backend
+
+Backend application built with .NET 7 following Clean Architecture and Domain-Driven Design principles.
+
+## 🏗️ Architecture
+
+The solution follows Clean Architecture with the following layers:
+
+```
+src/
+├── TestMillion.Domain/           # Enterprise business rules
+│   ├── Common/                   # Shared abstractions
+│   ├── Entities/                 # Domain entities
+│   ├── Interfaces/               # Repository interfaces
+│   └── ValueObjects/             # Domain value objects
+│
+├── TestMillion.Application/      # Application business rules
+│   ├── Common/                   # Cross-cutting concerns
+│   │   ├── Behaviours/          # Pipeline behaviors
+│   │   ├── Commands/            # Command interfaces
+│   │   ├── Exceptions/          # Exception handling
+│   │   ├── Mappings/            # AutoMapper profiles
+│   │   ├── Models/              # DTOs and requests
+│   │   ├── Queries/             # Query interfaces
+│   │   └── Response/            # Response wrappers
+│   └── DependencyInjection.cs   # DI configuration
+│
+└── TestMillion.Infrastructure/   # External concerns
+    ├── Persistence/             # Data access
+    │   └── MongoDB/             # MongoDB configuration
+    ├── Repositories/            # Repository implementations
+    └── DependencyInjection.cs   # DI configuration
+```
+
+### Domain Layer
+
+- Contains enterprise business rules and core entities
+- Implements DDD patterns (Entities, Value Objects)
+- No dependencies on other projects
+
+#### Key Components:
+- `Entity.cs`: Base class for all entities
+- `ValueObject.cs`: Base class for value objects
+- `IBaseRepository.cs`: Generic repository interface
+
+### Application Layer
+
+- Contains application business rules
+- Implements CQRS pattern with MediatR
+- Handles cross-cutting concerns
+
+#### Key Features:
+- Validation behaviors
+- Exception handling
+- AutoMapper profiles
+- Pagination support
+- CQRS implementation
+
+### Infrastructure Layer
+
+- Implements external concerns
+- MongoDB persistence
+- Repository implementations
+
+## 🗄️ Data Model
+
+Core entities in the system:
+
+- **Property**: Real estate property information
+- **Owner**: Property owner details
+- **PropertyImage**: Property images and metadata
+- **PropertyTrace**: Property history and changes
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- .NET 7 SDK
+- MongoDB
+- Docker (optional)
+
+### Configuration
+
+Add the following to your `appsettings.json`:
+
+```json
+{
+  "MongoDbSettings": {
+    "ConnectionString": "your_mongodb_connection_string",
+    "DatabaseName": "TestMillion"
+  }
+}
+```
+
+### Running the Application
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/yourusername/TestMillion.git
+   cd TestMillion
+   ```
+
+2. **Restore dependencies**:
+   ```bash
+   dotnet restore
+   ```
+
+3. **Run the application**:
+   ```bash
+   dotnet run --project src/TestMillion.Api/TestMillion.Api.csproj
+   ```
+
+### Docker Support
+
+Build and run with Docker:
+
+```bash
+docker-compose up --build
+```
+
+## 🧪 Testing
+
+The solution includes various test types:
+
+```bash
+# Run all tests
+dotnet test
+
+# Run specific test project
+dotnet test tests/TestMillion.Application.Tests
+```
+
+## 📚 API Documentation
+
+API documentation is available via Swagger UI when running the application:
+
+```
+http://localhost:5000/swagger
+```
+
+## 🔍 API Endpoints
+
+### Properties
+- `GET /api/properties`: List properties (with pagination)
+- `GET /api/properties/{id}`: Get property details
+- `POST /api/properties`: Create property
+- `PUT /api/properties/{id}`: Update property
+- `DELETE /api/properties/{id}`: Delete property
+
+### Property Images
+- `POST /api/properties/{id}/images`: Upload property image
+- `GET /api/properties/{id}/images`: Get property images
+- `DELETE /api/properties/{id}/images/{imageId}`: Delete property image
+
+### Owners
+- `GET /api/owners`: List owners
+- `POST /api/owners`: Create owner
+- `PUT /api/owners/{id}`: Update owner
+- `DELETE /api/owners/{id}`: Delete owner
+
+## 📦 Dependencies
+
+### Core
+- `Microsoft.NET.Sdk.Web`: Web SDK
+- `MongoDB.Driver`: MongoDB driver
+- `AutoMapper`: Object mapping
+- `MediatR`: CQRS implementation
+
+### Development
+- `Swashbuckle.AspNetCore`: API documentation
+- `FluentValidation`: Request validation
+- `Serilog`: Logging
+
+## 🔐 Security
+
+- JWT authentication
+- Role-based authorization
+- Input validation
+- Exception handling middleware
+- Secure configuration management
+
+## 🔄 Error Handling
+
+The application implements a global exception handler that returns appropriate HTTP status codes:
+
+- `400 Bad Request`: Validation errors
+- `404 Not Found`: Resource not found
+- `500 Internal Server Error`: Unexpected errors
+
+All exceptions are logged with correlation IDs for tracking.
