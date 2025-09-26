@@ -225,7 +225,7 @@ The built files will be in the `dist` directory, ready for deployment.
 
 # TestMillion Backend
 
-Backend application built with .NET 7 following Clean Architecture and Domain-Driven Design principles.
+Backend application built with .NET 8 following Clean Architecture and Domain-Driven Design principles.
 
 ## 🏗️ Architecture
 
